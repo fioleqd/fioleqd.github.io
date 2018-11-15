@@ -268,7 +268,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/15/leetcode-No-5/" itemprop="url">5、最长回文子串</a></h1>
+                <a class="post-title-link" href="/2018/11/15/leetcode-No-5/" itemprop="url">leetcode 5、最长回文子串</a></h1>
         
 
         <div class="post-meta">
@@ -328,7 +328,7 @@
 <p>示例 2：</p>
 <p>输入: “cbbd”</p>
 <p>输出: “bb”</p>
-<h2 id="第一种解法："><a href="#第一种解法：" class="headerlink" title="第一种解法："></a>第一种解法：</h2><p>假设原字符串为s，反转字符串为s‘。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。</p>
+<h2 id="第一种解法："><a href="#第一种解法：" class="headerlink" title="第一种解法："></a>第一种解法：</h2><p>假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。</p>
 <p>如果一个字符串s含有回文子串，那该字符串既是s的子串也是s’的子串。所以该问题转变为了求一个字符串s和其反转字符串s’的最长公共子串。</p>
 <p>但是这样会存在一个问题，即原字符串s中的某一个非回文子串的逆字符串也存在，比如“abcdjkldcba”，该字符串s和s’的最长公共子串为abcd，但这并不是回文串。</p>
 <pre><code>  String longestPalindrome(String s){
