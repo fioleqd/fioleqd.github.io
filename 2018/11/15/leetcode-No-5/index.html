@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="fiole&#39;s blogs">
 <meta property="og:description" content="给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。 示例 1：  输入: “babad” 输出: “bab” 注意: “aba”也是一个有效答案。 示例 2： 输入: “cbbd” 输出: “bb” 第一种解法：假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。 如果一个字符串s含有回文">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-15T12:58:06.790Z">
+<meta property="og:updated_time" content="2018-11-16T03:25:54.235Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode 5、最长回文子串">
 <meta name="twitter:description" content="给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。 示例 1：  输入: “babad” 输出: “bab” 注意: “aba”也是一个有效答案。 示例 2： 输入: “cbbd” 输出: “bb” 第一种解法：假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。 如果一个字符串s含有回文">
@@ -356,6 +356,47 @@
     return s.substring(start,start + maxLength);
 }
 </code></pre><p>这种解法的时间复杂度为O(n^3)的，空间复杂度时O(1)，这种解法并不能通过所有的测试用例，测试用例太长会导致运行超时。</p>
+<h2 id="第二种解法："><a href="#第二种解法：" class="headerlink" title="第二种解法："></a>第二种解法：</h2><p>动态规划</p>
+<p>考虑“ababa”这个例子。如果我们已知“bab”是回文的，那么很明显，“ababa”一定是回文的，因为它的左首字母和右尾字母是相同的。</p>
+<p>定义p(i,j)：当子串si到sj为回文串时，p(i,j)为true；否则，p(i,j)为false。</p>
+<p>因此，</p>
+<p>p(i,j)=(p(i+1,j-1)) &amp; si==sj)  p(i+1,j-1)为上述例子中去掉左右的中间部分</p>
+<p>基本的实例如下：</p>
+<p>p(i,i) = true，一个字母肯定为true</p>
+<p>p(i,i+) = (si==sj)，两个字母时比较这两个字母的值</p>
+<p>由此能够得到所有解的集合，代码如下</p>
+<pre><code>   String longestPalindrome(String s){
+    boolean p[][] = new boolean[s.length()][s.length()];
+    int start = 0,maxLength = 1;
+    //i要从最后一行开始计算，如果从第一行开始，当计算p[0][2]时需要用到
+    //p[1][1]的值，但此时p[1][1]还尚未赋值，导致结果出错，而j只需要&gt;=i的值
+    for(int i=s.length() - 1;i&gt;=0;i--){
+        for(int j=i;j&lt;s.length();j++){
+            if(i == j){ //只有一个字母的情况
+                p[i][j] = true;
+            }
+            else if(i == j - 1){ //两个字母的情况
+                p[i][j] = (s.charAt(i) == s.charAt(j));
+            }
+            else {
+                p[i][j] = p[i+1][j-1] &amp; (s.charAt(i) == s.charAt(j));
+            }
+            //计算结束后，如果当前的子串是回文的，且长度比之前的长，进行替换
+            if(p[i][j] &amp;&amp; j-i+1 &gt; maxLength){
+                maxLength = j-i+1;
+                start=i;
+            }
+        }
+    }
+    String result = &quot;&quot;;
+    // 当输入是空字符串时，maxLength默认长度是1，此时截取子串会越界，所以需判断一下
+    if(start + maxLength &lt;= s.length()){
+        result = s.substring(start,start+maxLength);
+    }
+    return result;
+}
+</code></pre><p>这种方法的时间复杂度是O(n^2)，空间复杂度也是O(n^2)的。</p>
+<p>第一种方法提交，一共103个测试用例，只通过了93个；第二种方法全部通过。</p>
 
       
     </div>
@@ -517,7 +558,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一种解法："><span class="nav-number">1.</span> <span class="nav-text">第一种解法：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一种解法："><span class="nav-number">1.</span> <span class="nav-text">第一种解法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二种解法："><span class="nav-number">2.</span> <span class="nav-text">第二种解法：</span></a></li></ol></div>
             
 
           </div>
