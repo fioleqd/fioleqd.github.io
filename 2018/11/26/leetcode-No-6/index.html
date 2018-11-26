@@ -91,7 +91,8 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/4.png">
-<meta property="og:updated_time" content="2018-11-26T08:22:57.065Z">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/2.png">
+<meta property="og:updated_time" content="2018-11-26T13:19:20.288Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="6、Z字形变换">
 <meta name="twitter:description" content="将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。 比如输入字符串为 “LEETCODEISHIRING” 行数为 3 时，排列如下：  之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：”LCIRETOESIIGEDHN”。 请你实现这个将字符串进行指定行数变换的函数：string convert(string s, int numRows); 示例 1: 输">
@@ -410,7 +411,57 @@
 <p><img src="/2018/11/26/leetcode-No-6/4.png" alt=""></p>
 <p>以numRows = 4的组合为例，最左边的数字表示行下标，第一列是满行的，此时zCol为1，<br>下一列zCol为2，此时只有行下标为2时有值，zCol为3时，只有行下标为1有值，所有在zCol不为1的列，行下标满足 numRows - zCol的关系。</p>
 <p>当zCol+1 == numRows时，表示当前组合结束，进入下一组合，此时置zCol = 1，重新开始计数。</p>
-
+<h1 id="解法二："><a href="#解法二：" class="headerlink" title="解法二："></a>解法二：</h1><p>由解法一可以进一步联想到，解法一是用二维数组来存放Z字形字符，如果直接用下标来控制字符的输出，可以直接来模拟二维数组的效果。</p>
+<p><img src="/2018/11/26/leetcode-No-6/2.png" alt=""><br>考虑numRows为4的情况，第一行和最后一行最容易判断，直接算间隔就行，即 2 * numRows - 2</p>
+<p>第二行时，E到O的间隔，其实相当于是numRows为3时，第一行的间隔，即 2 * 3 - 2</p>
+<p>所以在中间行的间隔是 2 * （numRows - row) - 2 ,其中row是当前行，从0开始</p>
+<p>那再计算O到第二个E的距离时，应该是numRows = 4时的间隔减去numRows = 3时的间隔，即2 <em> (numRows) - 2 - [2 </em> (numRows - row) -2] = 2 * row</p>
+<p>以此类推，直到最后一行</p>
+<pre><code>public String convert(String s,int numRows){
+    if(numRows &lt;= 1){
+        return s;
+    }
+    List&lt;StringBuilder&gt; stringList = new ArrayList&lt;&gt;();
+    for(int i = 0;i &lt; numRows;i++){
+        stringList.add(new StringBuilder());
+    }
+    int n = 0,row = 0;
+    /**
+     * isMiddle 用来标识是否是非首尾行的中间项
+     */
+    boolean isMiddle = false;
+    while(n &lt; s.length() &amp;&amp; row &lt; numRows){
+        if(row == 0 || row == numRows - 1){
+            int jump = 2 * numRows - 2;
+            stringList.get(row).append(s.charAt(n));
+            n += jump;
+        }
+        else {
+            int jump;
+            if(!isMiddle){
+                jump = 2 * (numRows - row) - 2;
+                isMiddle = true;
+            }
+            else {
+                jump = 2 * row;
+                isMiddle = false;
+            }
+            stringList.get(row).append(s.charAt(n));
+            n += jump;
+        }
+        if(n &gt;= s.length()){
+            isMiddle = false;
+            row++;
+            n = row;
+        }
+    }
+    StringBuilder stringBuilder = new StringBuilder();
+    for(StringBuilder tmp : stringList){
+        stringBuilder.append(tmp);
+    }
+    return stringBuilder.toString();
+}
+</code></pre>
       
     </div>
     
@@ -571,7 +622,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#解法一："><span class="nav-number">1.</span> <span class="nav-text">解法一：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#解法一："><span class="nav-number">1.</span> <span class="nav-text">解法一：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解法二："><span class="nav-number">2.</span> <span class="nav-text">解法二：</span></a></li></ol></div>
             
 
           </div>
