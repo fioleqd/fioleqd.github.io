@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。  public V put(K key, V value) {     return putVal(hash(key), key, value, false, true); }  final V putVal(int hash, K key">
+<meta name="description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。12345678910111213141516171819202122232425262728293031323334353637383940414243444546public V put(K key, V value) &amp;#123;">
 <meta name="keywords" content="hashmap,源码">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HashMap put()、get()方法源码">
 <meta property="og:url" content="http://yoursite.com/2018/11/14/HashMap/index.html">
 <meta property="og:site_name" content="fiole&#39;s blogs">
-<meta property="og:description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。  public V put(K key, V value) {     return putVal(hash(key), key, value, false, true); }  final V putVal(int hash, K key">
+<meta property="og:description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。12345678910111213141516171819202122232425262728293031323334353637383940414243444546public V put(K key, V value) &amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T06:28:56.055Z">
+<meta property="og:updated_time" content="2018-11-27T06:55:22.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashMap put()、get()方法源码">
-<meta name="twitter:description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。  public V put(K key, V value) {     return putVal(hash(key), key, value, false, true); }  final V putVal(int hash, K key">
+<meta name="twitter:description" content="在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。12345678910111213141516171819202122232425262728293031323334353637383940414243444546public V put(K key, V value) &amp;#123;">
 
 
 
@@ -363,79 +363,9 @@
       
 
       
-        <p>在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。 </p>
-<pre><code>public V put(K key, V value) {
-    return putVal(hash(key), key, value, false, true);
-}
-
-final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
-               boolean evict) {
-    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; int n, i;
-    if ((tab = table) == null || (n = tab.length) == 0)
-        n = (tab = resize()).length;
-    if ((p = tab[i = (n - 1) &amp; hash]) == null)
-        tab[i] = newNode(hash, key, value, null);
-    else {
-        Node&lt;K,V&gt; e; K k;
-        if (p.hash == hash &amp;&amp;
-            ((k = p.key) == key || (key != null &amp;&amp; key.equals(k))))
-            e = p;
-        else if (p instanceof TreeNode)
-            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(this, tab, hash, key, value);
-        else {
-            for (int binCount = 0; ; ++binCount) {
-                if ((e = p.next) == null) {
-                    p.next = newNode(hash, key, value, null);
-                    if (binCount &gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st
-                        treeifyBin(tab, hash);
-                    break;
-                }
-                if (e.hash == hash &amp;&amp;
-                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-                    break;
-                p = e;
-            }
-        }
-        if (e != null) { // existing mapping for key
-            V oldValue = e.value;
-            if (!onlyIfAbsent || oldValue == null)
-                e.value = value;
-            afterNodeAccess(e);
-            return oldValue;
-        }
-    }
-    ++modCount;
-    if (++size &gt; threshold)
-        resize();
-    afterNodeInsertion(evict);
-    return null;
-}
-</code></pre><p>在第二段代码的第6行中，如果tab[(n-1) &amp; hash]为null则直接创建一个新的节点，这里使用按位与操作，其计算效率要比取模要高。<br>从代码的第8行到第36行是当前节点已存在时的策略。第二段代码的第10行到第12行与第23行到第25行的策略相同，即如果当前map中含有需要put的节点则直接返回该节点。如果该节点既不存在又不是TreeNode节点，则进行遍历操作，如第二段代码的16行到27行所示，遍历过程中如果找到map中的null节点则将该节点插入，同时如果这时节点个数达到转换成红黑树的上界，则转换成红黑树。</p>
-<pre><code>public V get(Object key) {
-    Node&lt;K,V&gt; e;
-    return (e = getNode(hash(key), key)) == null ? null : e.value;
-}
-
-final Node&lt;K,V&gt; getNode(int hash, Object key) {
-    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; int n; K k;
-    if ((tab = table) != null &amp;&amp; (n = tab.length) &gt; 0 &amp;&amp;
-        (first = tab[(n - 1) &amp; hash]) != null) {
-        if (first.hash == hash &amp;&amp; // always check first node
-            ((k = first.key) == key || (key != null &amp;&amp; key.equals(k))))
-            return first;
-        if ((e = first.next) != null) {
-            if (first instanceof TreeNode)
-                return ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);
-            do {
-                if (e.hash == hash &amp;&amp;
-                    ((k = e.key) == key || (key != null &amp;&amp; key.equals(k))))
-                    return e;
-            } while ((e = e.next) != null);
-        }
-    }
-    return null;
-}
-</code></pre><p>有了上面的put操作，get操作读起来就很方便了，先判断当前的table是否为空，同时table的(n-1) &amp; hash<br>的值存在，若不存在则返回null，如果存在且当前节点的值与key相同则直接返回，不相同先判断是否为TreeNode节点，如是则按照TreeNode方式取值，若不是则遍历（n-1） &amp; hash之后的所有节点。</p>
+        <p>在找实习的时候，面试官问了hashmap的put和get方法的源码实现，虽然平时经常用hashmap但是源码的具体实现上还没关注过，所以看完源码之后总结一下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">       Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">       <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">           n = (tab = resize()).length;</span><br><span class="line">       <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</span><br><span class="line">           tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">       <span class="keyword">else</span> &#123;</span><br><span class="line">           Node&lt;K,V&gt; e; K k;</span><br><span class="line">           <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">               ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">               e = p;</span><br><span class="line">           <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">               e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">           <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                   <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                       p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                       <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                           treeifyBin(tab, hash);</span><br><span class="line">                       <span class="keyword">break</span>;</span><br><span class="line">                   &#125;</span><br><span class="line">                   <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                       ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                       <span class="keyword">break</span>;</span><br><span class="line">                   p = e;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">               V oldValue = e.value;</span><br><span class="line">               <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                   e.value = value;</span><br><span class="line">               afterNodeAccess(e);</span><br><span class="line">               <span class="keyword">return</span> oldValue;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       ++modCount;</span><br><span class="line">       <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">           resize();</span><br><span class="line">       afterNodeInsertion(evict);</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在第二段代码的第6行中，如果tab[(n-1) &amp; hash]为null则直接创建一个新的节点，这里使用按位与操作，其计算效率要比取模要高。<br>从代码的第8行到第36行是当前节点已存在时的策略。第二段代码的第10行到第12行与第23行到第25行的策略相同，即如果当前map中含有需要put的节点则直接返回该节点。如果该节点既不存在又不是TreeNode节点，则进行遍历操作，如第二段代码的16行到27行所示，遍历过程中如果找到map中的null节点则将该节点插入，同时如果这时节点个数达到转换成红黑树的上界，则转换成红黑树。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">       Node&lt;K,V&gt; e;</span><br><span class="line">       <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">       Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</span><br><span class="line">       <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">           (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></span><br><span class="line">               ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">               <span class="keyword">return</span> first;</span><br><span class="line">           <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                   <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br><span class="line">               <span class="keyword">do</span> &#123;</span><br><span class="line">                   <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                       ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                       <span class="keyword">return</span> e;</span><br><span class="line">               &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>有了上面的put操作，get操作读起来就很方便了，先判断当前的table是否为空，同时table的(n-1) &amp; hash<br>的值存在，若不存在则返回null，如果存在且当前节点的值与key相同则直接返回，不相同先判断是否为TreeNode节点，如是则按照TreeNode方式取值，若不是则遍历（n-1） &amp; hash之后的所有节点。</p>
 
       
     </div>
@@ -569,7 +499,7 @@ final Node&lt;K,V&gt; getNode(int hash, Object key) {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -671,6 +601,8 @@ final Node&lt;K,V&gt; getNode(int hash, Object key) {
   
 
 
+  
+
 
 
 
@@ -709,6 +641,11 @@ final Node&lt;K,V&gt; getNode(int hash, Object key) {
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
