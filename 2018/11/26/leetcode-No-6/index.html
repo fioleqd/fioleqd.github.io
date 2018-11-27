@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/leetcode-No-6/5.png">
-<meta property="og:updated_time" content="2018-11-26T13:55:53.414Z">
+<meta property="og:updated_time" content="2018-11-27T04:57:45.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode 6、Z字形变换">
 <meta name="twitter:description" content="将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。 比如输入字符串为 “LEETCODEISHIRING” 行数为 3 时，排列如下：  之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：”LCIRETOESIIGEDHN”。 请你实现这个将字符串进行指定行数变换的函数：string convert(string s, int numRows); 示例 1: 输">
@@ -423,10 +423,7 @@
     if(numRows &lt;= 1){
         return s;
     }
-    List&lt;StringBuilder&gt; stringList = new ArrayList&lt;&gt;();
-    for(int i = 0;i &lt; numRows;i++){
-        stringList.add(new StringBuilder());
-    }
+    StringBuilder result = new StringBuilder();
     int n = 0,row = 0;
     /**
      * isMiddle 用来标识是否是非首尾行的中间项
@@ -435,7 +432,7 @@
     while(n &lt; s.length() &amp;&amp; row &lt; numRows){
         if(row == 0 || row == numRows - 1){
             int jump = 2 * numRows - 2;
-            stringList.get(row).append(s.charAt(n));
+            result.append(s.charAt(n));
             n += jump;
         }
         else {
@@ -448,7 +445,7 @@
                 jump = 2 * row;
                 isMiddle = false;
             }
-            stringList.get(row).append(s.charAt(n));
+            result.append(s.charAt(n));
             n += jump;
         }
         if(n &gt;= s.length()){
@@ -457,11 +454,7 @@
             n = row;
         }
     }
-    StringBuilder stringBuilder = new StringBuilder();
-    for(StringBuilder tmp : stringList){
-        stringBuilder.append(tmp);
-    }
-    return stringBuilder.toString();
+    return result.toString();
 }
 </code></pre><h1 id="官方题解："><a href="#官方题解：" class="headerlink" title="官方题解："></a>官方题解：</h1><h2 id="解法一：-按行排序"><a href="#解法一：-按行排序" class="headerlink" title="解法一： 按行排序"></a>解法一： 按行排序</h2><p>上面的解法拘泥于去模仿Z字形的原状，其实可以更简单化。</p>
 <p><img src="/2018/11/26/leetcode-No-6/2.png" alt=""></p>
