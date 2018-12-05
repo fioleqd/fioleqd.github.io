@@ -79,15 +79,21 @@
 
 
 
+<meta name="description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
 <meta name="keywords" content="Java垃圾回收,内存分配">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java垃圾回收与内存分配">
 <meta property="og:url" content="http://yoursite.com/2018/12/05/java-garbage-collection/index.html">
 <meta property="og:site_name" content="fiole&#39;s blogs">
+<meta property="og:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-05T11:22:58.245Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/2.png">
+<meta property="og:updated_time" content="2018-12-05T12:16:59.161Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java垃圾回收与内存分配">
+<meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/1.png">
 
 
 
@@ -360,7 +366,30 @@
       
 
       
-        
+        <p>Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。</p>
+<h1 id="对象生存状态判断"><a href="#对象生存状态判断" class="headerlink" title="对象生存状态判断"></a>对象生存状态判断</h1><p>对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。</p>
+<ul>
+<li><strong>引用计数算法</strong></li>
+</ul>
+<p>引用技术算法时为每个对象添加一个引用计数器，每当一个地方引用到它时，计数器值加1，当引用失效时，计数器值减1，当计数器值为0时，表示该对象不再被使用。</p>
+<p>这种算法实现简单，且判断效率也很高，但是无法解决相互引用的问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReferenceCounting</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> Object instance = <span class="keyword">null</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ReferenceCounting a = <span class="keyword">new</span> ReferenceCounting();</span><br><span class="line">        ReferenceCounting b = <span class="keyword">new</span> ReferenceCounting();</span><br><span class="line">        </span><br><span class="line">        a.instance = b;</span><br><span class="line">        b.instance = a;</span><br><span class="line">        </span><br><span class="line">        a = <span class="keyword">null</span>;</span><br><span class="line">        b = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>比如这种情况下，a、b之间的成员变量相互引用，但是此时instance已经没有意义了，但是这种情况下instan的计数器值并不是0，导致判断出错。</p>
+<ul>
+<li><strong>可达性分析算法</strong></li>
+</ul>
+<p>目前主流的商用程序语言(Java、C#等)都是使用的可达性分析算法。这一算法的基本思路时通过一系列称为”GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索过程中所经过的路径称为引用链(Reference Chain)，当一个对象到GC Roots没有任何引用链相连时，证明该对象是不可用的（图论上称，从GC Roots到该对象不可达）。</p>
+<p><img src="/2018/12/05/java-garbage-collection/1.png" alt=""></p>
+<p>在Java语言中，可以作为GC Roots的对象包括：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中的静态属性引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中JNI（即一般说的Native方法）引用的对象</li>
+</ul>
+<p><em>注：JNI是Java Native Interface的缩写，它提供了若干的API实现了Java和其他语言的通信</em></p>
+<h1 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h1><h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><p><img src="/2018/12/05/java-garbage-collection/2.png" alt=""></p>
+
       
     </div>
     
@@ -455,8 +484,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -516,6 +554,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对象生存状态判断"><span class="nav-number">1.</span> <span class="nav-text">对象生存状态判断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">2.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">2.1.</span> <span class="nav-text">标记-清除算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
