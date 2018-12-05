@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Java垃圾回收,内存分配,">
+  <meta name="keywords" content="垃圾回收算法,垃圾回收器,内存分配,">
 
 
 
@@ -79,20 +79,22 @@
 
 
 
-<meta name="description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
-<meta name="keywords" content="Java垃圾回收,内存分配">
+<meta name="description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
+<meta name="keywords" content="垃圾回收算法,垃圾回收器,内存分配">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java垃圾回收与内存分配">
 <meta property="og:url" content="http://yoursite.com/2018/12/05/java-garbage-collection/index.html">
 <meta property="og:site_name" content="fiole&#39;s blogs">
-<meta property="og:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
+<meta property="og:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/2.png">
-<meta property="og:updated_time" content="2018-12-05T12:16:59.161Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/3.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/4.png">
+<meta property="og:updated_time" content="2018-12-05T13:41:52.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java垃圾回收与内存分配">
-<meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，每当一个">
+<meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
 <meta name="twitter:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/1.png">
 
 
@@ -367,7 +369,7 @@
 
       
         <p>Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。</p>
-<h1 id="对象生存状态判断"><a href="#对象生存状态判断" class="headerlink" title="对象生存状态判断"></a>对象生存状态判断</h1><p>对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。</p>
+<h1 id="回收算法"><a href="#回收算法" class="headerlink" title="回收算法"></a>回收算法</h1><h2 id="对象生存状态判断"><a href="#对象生存状态判断" class="headerlink" title="对象生存状态判断"></a>对象生存状态判断</h2><p>对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。</p>
 <ul>
 <li><strong>引用计数算法</strong></li>
 </ul>
@@ -387,8 +389,18 @@
 <li>方法区中常量引用的对象</li>
 <li>本地方法栈中JNI（即一般说的Native方法）引用的对象</li>
 </ul>
-<p><em>注：JNI是Java Native Interface的缩写，它提供了若干的API实现了Java和其他语言的通信</em></p>
-<h1 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h1><h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><p><img src="/2018/12/05/java-garbage-collection/2.png" alt=""></p>
+<p><em>注：JNI是Java Native Interface的缩写，它提供了若干的API实现了Java和其他语言<br>的通信</em></p>
+<h2 id="回收方法区"><a href="#回收方法区" class="headerlink" title="回收方法区"></a>回收方法区</h2><h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>标记-清除算法分为“标记”和“清除”两个阶段，首先标记出所有需要回收的对象，在标记完成之后统一回收被标记的对象。</p>
+<p>缺点：效率不高；空间问题，容易产生内存碎片。</p>
+<p><img src="/2018/12/05/java-garbage-collection/2.png" alt=""></p>
+<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><p>复制算法是将可用内存按容量划分为相等的两块，每次只使用一块，当这一块内存空间不足时，将存活的所有对象复制到另一块内存上，并将该部分内存清空。</p>
+<p>优点：每次只对半区进行回收，效率高；内存不存在碎片化问题。</p>
+<p>缺点：将内存缩小为原来的一半，代价太高。</p>
+<p><img src="/2018/12/05/java-garbage-collection/3.png" alt=""></p>
+<p>目前虚拟机使用这种算法对新生代进行回收。虚拟机将新生代分为一个Eden区和两个Survivor区，Eden和Survivor的默认比例是8：1。每次使用Eden区和一个Survivor区，当内存空间不足时，将Eden区和该Survivor区的存活对象全部复制到另一个Survivor区，最后清理掉Eden区和刚使用过的Survivor区。由于Eden区和Survivor区的比例是8：1，所以整个内存的利用率为90%(80+10)，只需要付出10%的代价，当这10%的空间不足以容纳所有的存活对象时需要老年代来进行分配担保。</p>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p>标记-整理算法的“标记”阶段和标记-清除算法相同，但是下一阶段是所有的存活对象都向一端移动，然后直接清理掉端边界外的内存。</p>
+<p><img src="/2018/12/05/java-garbage-collection/4.png" alt=""></p>
+<h3 id="分代收集"><a href="#分代收集" class="headerlink" title="分代收集"></a>分代收集</h3><p>一般是把Java堆分为新生代和老年代。新生代中，每次进行垃圾回收时都有大批对象死去，只有少量存活，适合用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。而老年代中因为对象存活率高、没有额外空间进行分配担保，就必须使用“标记-整理”或“标记-清除”算法来进行回收。</p>
 
       
     </div>
@@ -406,7 +418,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java垃圾回收/" rel="tag"># Java垃圾回收</a>
+            <a href="/tags/垃圾回收算法/" rel="tag"># 垃圾回收算法</a>
+          
+            <a href="/tags/垃圾回收器/" rel="tag"># 垃圾回收器</a>
           
             <a href="/tags/内存分配/" rel="tag"># 内存分配</a>
           
@@ -531,7 +545,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -564,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#对象生存状态判断"><span class="nav-number">1.</span> <span class="nav-text">对象生存状态判断</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">2.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">2.1.</span> <span class="nav-text">标记-清除算法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#回收算法"><span class="nav-number">1.</span> <span class="nav-text">回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象生存状态判断"><span class="nav-number">1.1.</span> <span class="nav-text">对象生存状态判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回收方法区"><span class="nav-number">1.2.</span> <span class="nav-text">回收方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">1.3.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制算法"><span class="nav-number">1.3.2.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">1.3.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集"><span class="nav-number">1.3.4.</span> <span class="nav-text">分代收集</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
