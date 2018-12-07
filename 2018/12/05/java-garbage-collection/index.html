@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="垃圾回收算法,垃圾回收器,内存分配,">
+  <meta name="keywords" content="垃圾回收算法,垃圾回收器,">
 
 
 
@@ -80,9 +80,9 @@
 
 
 <meta name="description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
-<meta name="keywords" content="垃圾回收算法,垃圾回收器,内存分配">
+<meta name="keywords" content="垃圾回收算法,垃圾回收器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java垃圾回收与内存分配">
+<meta property="og:title" content="Java垃圾回收">
 <meta property="og:url" content="http://yoursite.com/2018/12/05/java-garbage-collection/index.html">
 <meta property="og:site_name" content="fiole&#39;s blog">
 <meta property="og:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
@@ -91,9 +91,16 @@
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/3.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/4.png">
-<meta property="og:updated_time" content="2018-12-05T13:54:44.499Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/5.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/7.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/6.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/parallel.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/cms.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/g1.png">
+<meta property="og:updated_time" content="2018-12-07T08:55:47.795Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java垃圾回收与内存分配">
+<meta name="twitter:title" content="Java垃圾回收">
 <meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。 回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器，">
 <meta name="twitter:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/1.png">
 
@@ -131,7 +138,7 @@
 
 
 
-  <title>Java垃圾回收与内存分配 | fiole's blog</title>
+  <title>Java垃圾回收 | fiole's blog</title>
   
 
 
@@ -275,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java垃圾回收与内存分配</h1>
+          <h1 class="post-title" itemprop="name headline">Java垃圾回收</h1>
         
 
         <div class="post-meta">
@@ -348,7 +355,7 @@
 
           
           
-             <span id="/2018/12/05/java-garbage-collection/" class="leancloud_visitors" data-flag-title="Java垃圾回收与内存分配">
+             <span id="/2018/12/05/java-garbage-collection/" class="leancloud_visitors" data-flag-title="Java垃圾回收">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -401,7 +408,7 @@
 <li>本地方法栈中JNI（即一般说的Native方法）引用的对象</li>
 </ul>
 <p><em>注：JNI是Java Native Interface的缩写，它提供了若干的API实现了Java和其他语言<br>的通信</em></p>
-<h2 id="回收方法区"><a href="#回收方法区" class="headerlink" title="回收方法区"></a>回收方法区</h2><h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>标记-清除算法分为“标记”和“清除”两个阶段，首先标记出所有需要回收的对象，在标记完成之后统一回收被标记的对象。</p>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>标记-清除算法分为“标记”和“清除”两个阶段，首先标记出所有需要回收的对象，在标记完成之后统一回收被标记的对象。</p>
 <p>缺点：效率不高；空间问题，容易产生内存碎片。</p>
 <p><img src="/2018/12/05/java-garbage-collection/2.png" alt=""></p>
 <h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><p>复制算法是将可用内存按容量划分为相等的两块，每次只使用一块，当这一块内存空间不足时，将存活的所有对象复制到另一块内存上，并将该部分内存清空。</p>
@@ -412,6 +419,55 @@
 <h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3><p>标记-整理算法的“标记”阶段和标记-清除算法相同，但是下一阶段是所有的存活对象都向一端移动，然后直接清理掉端边界外的内存。</p>
 <p><img src="/2018/12/05/java-garbage-collection/4.png" alt=""></p>
 <h3 id="分代收集"><a href="#分代收集" class="headerlink" title="分代收集"></a>分代收集</h3><p>一般是把Java堆分为新生代和老年代。新生代中，每次进行垃圾回收时都有大批对象死去，只有少量存活，适合用复制算法，只需要付出少量存活对象的复制成本就可以完成收集。而老年代中因为对象存活率高、没有额外空间进行分配担保，就必须使用“标记-整理”或“标记-清除”算法来进行回收。</p>
+<hr>
+<h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><p><img src="/2018/12/05/java-garbage-collection/5.png" alt=""></p>
+<p>图中展示了七种作用于不同分代的垃圾收集器，如果两两之间存在连线，则表示这两个可以搭配使用。</p>
+<h2 id="Serial"><a href="#Serial" class="headerlink" title="Serial"></a>Serial</h2><p>Serial收集器是一个单线程收集器，单线程不仅意味着它只使用单个CPU或者一条收集线程进行工作，还意味着该收集器工作时，所有的用户线程必须停止所有的工作。</p>
+<p><img src="/2018/12/05/java-garbage-collection/6.png" alt="" title="Serial/Serial Old收集器运行示意图"></p>
+<h2 id="ParNew"><a href="#ParNew" class="headerlink" title="ParNew"></a>ParNew</h2><p>ParNew收集器是Serial收集器的多线程版本，除了使用多线程之外，其他比如收集算法、Stop the Wrold(用户线程全部停止工作)、对象分配规则、回收策略等都与Serial完全一样。它默认开启的收集线程数与CPU的数量相同。</p>
+<p><img src="/2018/12/05/java-garbage-collection/7.png" alt="" title="ParNew/Serial Old收集器运行示意图"></p>
+<p>目前只有Serial收集器、ParNew收集器能与CMS收集器配合工作。</p>
+<p><em>注：并行(Parallel)：指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态。</em></p>
+<p><em>并发(Concurrent)：指用户线程与垃圾收集线程同时执行（但不一定是并行的，有可能会交替执行），用户程序继续运行，垃圾收集程序运行在另一个CPU上。</em></p>
+<h2 id="Parallel-Scavenge"><a href="#Parallel-Scavenge" class="headerlink" title="Parallel Scavenge"></a>Parallel Scavenge</h2><p>Parallel Scavenge收集器的特点是它的关注点与其他收集器不同，它的目标是达到一个可控制的吞吐量。所谓吞吐量就是CPU用于运行用户代码的时间与CPU总消耗时间的比值，即吞吐量 = 运行用户代码时间 / （运行用户代码时间 + 垃圾收集时间）。高吞吐量意味着可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务。</p>
+<h2 id="Serial-Old"><a href="#Serial-Old" class="headerlink" title="Serial Old"></a>Serial Old</h2><p>Serial Old是Serial收集器的老年代版本，同样是单线程收集器，使用“标记-整理”算法。主要用途：一是在JDK1.5以及之前的版本中与Paral lel Scavenge配合使用；二是作为CMS在发生Concurrent Mode Failure时使用。</p>
+<p><img src="/2018/12/05/java-garbage-collection/6.png" alt="" title="Serial/Serial Old收集器运行示意图"></p>
+<h2 id="Parallel-Old"><a href="#Parallel-Old" class="headerlink" title="Parallel Old"></a>Parallel Old</h2><p>Parallel Old是Parallel Scavenge的老年代版本，使用多线程和“标记-整理”算法。</p>
+<p><img src="/2018/12/05/java-garbage-collection/parallel.png" alt="" title="Parallel Scavenge/Parallel Old收集器运行示意图"></p>
+<h2 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h2><p>CMS(Councurrent Mark Sweep)收集器是一种以获取最短回收停顿时间为目标的收集器。<br>是基于”标记-清除“算法实现实现的，整个运行过程分为4个步骤：</p>
+<ul>
+<li>初始标记</li>
+<li>并发标记</li>
+<li>重新标记</li>
+<li>并发清理</li>
+</ul>
+<p>其中，初始标记、重新标记两个步骤仍需要所有用户线程停止工作。初始标记仅标记与GC Roots直接相连的对象，速度很快，并发标记阶段是进行GC Roots Tracing的过程，而重新标记是为了修正并发标记期间由于用户线程的运行使得标记产生变化的那一部分对象，这次停顿比初始标记的停顿时间长，但仍比并发标记的时间短。由于整个过程耗时最长的并发标记和并发清理阶段收集器线程与用户线程一起工作，所以，总体上说，CMS收集器与用户线程是并发工作的。</p>
+<p>缺点：</p>
+<ul>
+<li>CMS对收集器对CPU资源非常敏感，这是面对并发设计的程序的通病。在并发阶段，虽然不会导致用户线程停顿，但因为占用了一部分线程导致应用程序变慢，总吞吐量降低。CMS默认启动的线程数量是(CPU数量+3/4)，当CPU在4个以上时，并发回收时垃圾收集线程占用不少于25%的CPU资源，并随CPU数量的增加而下降<em>(注： (CPU数量+3)/4/CPU数量 = 1/4+3/4×CPU数量)</em>。但是当CPU数量不足4个时，比如两个，CMS收集线程会消耗掉50%的CPU资源，极大影响了用户线程的运行。</li>
+<li>CMS收集器无法处理浮动垃圾，可能出现“Concurrent Mode Failure”失败而导致一次Full GC(使用Serial Old)。由于并发清理阶段用户线程仍然在运行，此时产生的垃圾在此次清理阶段无法清除，只能留待下次清理，这些垃圾就是浮动垃圾。由于清理时用户线程仍在运行，所以不能等到老年代完全没有空间时才进行清理，必须为当前运行的程序保留充足的运行空间。在JDK1.5的默认设置下，CMS收集器在老年代内存占用超过68%之后就会工作，在JDK1.6中，这个阈值已经提高到了92%。如果CMS运行过程中预留的空间不能满足当前运行程序额需要，就会产生“Concurrent Mode Failure”失败，这时虚拟机就会使用Serial Old进行清理。</li>
+<li>CMS是基于“标记-清除”算法的收集器，所以会产生内存碎片。</li>
+</ul>
+<p><img src="/2018/12/05/java-garbage-collection/cms.png" alt="" title="CMS收集器运行示意图"></p>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>G1(Garbage First)是当前最新的成果，相比之前的收集器，G1具有以下特点：</p>
+<ul>
+<li>并行与并发：G1能充分利用多CPU、多核环境下的硬件优势，使用多个CPU(CPU或者CPU核心)来缩短Stop-The-World停顿的时间，部分其他收集器原本需要停顿Java线程执行的GC动作，也能通过并发的方式让Java程序继续执行。</li>
+<li>分代收集：与其他收集器一样，分代概念在G1中依然得以保留。虽然G1可以不需要其他收集器配合就能管理整个GC堆，但它能够采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果。</li>
+<li>空间整合：G1从整体上看是基于“标记-整理”算法的，从局部看（两个Region间）上看是基于“复制”算法实现的，无论怎样，G1都不会产生内存碎片。</li>
+<li>可预测的停顿：降低停顿时间是G1和CMS共同的关注点，但G1除了追求低停顿之外，还能建立可预测的停顿时间模型，能让使用者明确在一个长度为M毫秒的时间内，消耗在垃圾收集上的时间不得超过N毫秒。</li>
+</ul>
+<p>使用G1收集器时，Java堆的内存布局与其他收集器有很大差别，它将整个Java堆分为多个大小相等的独立区域(Region)，虽然还保留有新生代和老年代的概念，但是新生代和老年代不再是物理隔离的了，它们都是Region的集合。</p>
+<p>G1收集器之所以能建立可预测的停顿时间模型，是因为它可以有计划地避免在整个Java堆中进行全区域的垃圾收集。G1跟踪各个Region里面的垃圾堆积的价值大小（回收所获得的空间大小及回收所需时间的经验值），在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的Region（这也是Garbage First的由来）。</p>
+<p>在G1收集器中，Region之间的对象引用以及其他收集器中的新生代与老年代之间的对象引用，虚拟机都是使用Remembered Set来避免全堆扫描的。G1中每个Region都有一个与之对应的Remembered Set，虚拟机发现程序在对Reference类型的数据进行写操作时，会产生一个Write Barrier暂时中断写操作，检查Reference引用的对象是否处于不同的Region之中（在分代中就是检查是否老年代中的对象引用了新生代中的对象），如果是，便通过CardTable把相关引用信息记录到被引用对象所属的Region的Remembered Set中。当进行内存回收时，在GC根节点的枚举范围中加入Remembered Set即可保证不对全堆扫描也能不遗漏。</p>
+<p>不计算维护Remembered Set的操作，G1收集器的运作大致可划分为一下几个步骤：</p>
+<ul>
+<li>初始标记</li>
+<li>并发标记</li>
+<li>最终标记</li>
+<li>筛选回收  </li>
+</ul>
+<p>这四个步骤与CMS的收集过程大概相同，前两个步骤基本相同，最终标记的功能也是为了修正用户线程在运行时对原来的标记产生的改变，虚拟机会把这段时间对象变化记录在线程Remembered Set Logs里面，最终标记阶段会把Remembered Set Logs的数据合并到Remembered Set中。筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划，这个阶段垃圾收集线程可与用户线程并发执行。</p>
+<p><img src="/2018/12/05/java-garbage-collection/g1.png" alt="" title="G1收集器运行示意图"></p>
 
       
     </div>
@@ -432,8 +488,6 @@
             <a href="/tags/垃圾回收算法/" rel="tag"># 垃圾回收算法</a>
           
             <a href="/tags/垃圾回收器/" rel="tag"># 垃圾回收器</a>
-          
-            <a href="/tags/内存分配/" rel="tag"># 内存分配</a>
           
         </div>
       
@@ -558,7 +612,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -601,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#回收算法"><span class="nav-number">1.</span> <span class="nav-text">回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象生存状态判断"><span class="nav-number">1.1.</span> <span class="nav-text">对象生存状态判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回收方法区"><span class="nav-number">1.2.</span> <span class="nav-text">回收方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">1.3.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">1.3.1.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制算法"><span class="nav-number">1.3.2.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">1.3.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集"><span class="nav-number">1.3.4.</span> <span class="nav-text">分代收集</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#回收算法"><span class="nav-number">1.</span> <span class="nav-text">回收算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象生存状态判断"><span class="nav-number">1.1.</span> <span class="nav-text">对象生存状态判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垃圾收集算法"><span class="nav-number">1.2.</span> <span class="nav-text">垃圾收集算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-清除算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">标记-清除算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制算法"><span class="nav-number">1.2.2.</span> <span class="nav-text">复制算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记-整理算法"><span class="nav-number">1.2.3.</span> <span class="nav-text">标记-整理算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分代收集"><span class="nav-number">1.2.4.</span> <span class="nav-text">分代收集</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾收集器"><span class="nav-number">2.</span> <span class="nav-text">垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serial"><span class="nav-number">2.1.</span> <span class="nav-text">Serial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ParNew"><span class="nav-number">2.2.</span> <span class="nav-text">ParNew</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel-Scavenge"><span class="nav-number">2.3.</span> <span class="nav-text">Parallel Scavenge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Serial-Old"><span class="nav-number">2.4.</span> <span class="nav-text">Serial Old</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel-Old"><span class="nav-number">2.5.</span> <span class="nav-text">Parallel Old</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMS"><span class="nav-number">2.6.</span> <span class="nav-text">CMS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#G1"><span class="nav-number">2.7.</span> <span class="nav-text">G1</span></a></li></ol></li></ol></div>
             
 
           </div>
