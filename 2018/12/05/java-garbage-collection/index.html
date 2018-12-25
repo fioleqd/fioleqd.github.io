@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/parallel.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/cms.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/g1.png">
-<meta property="og:updated_time" content="2018-12-08T03:22:19.495Z">
+<meta property="og:updated_time" content="2018-12-25T06:39:12.729Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java垃圾回收">
 <meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。  回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器">
@@ -446,7 +446,7 @@
 <p>缺点：</p>
 <ul>
 <li>CMS对收集器对CPU资源非常敏感，这是面对并发设计的程序的通病。在并发阶段，虽然不会导致用户线程停顿，但因为占用了一部分线程导致应用程序变慢，总吞吐量降低。CMS默认启动的线程数量是(CPU数量+3/4)，当CPU在4个以上时，并发回收时垃圾收集线程占用不少于25%的CPU资源，并随CPU数量的增加而下降<em>(注： (CPU数量+3)/4/CPU数量 = 1/4+3/4×CPU数量)</em>。但是当CPU数量不足4个时，比如两个，CMS收集线程会消耗掉50%的CPU资源，极大影响了用户线程的运行。</li>
-<li>CMS收集器无法处理浮动垃圾，可能出现“Concurrent Mode Failure”失败而导致一次Full GC(使用Serial Old)。由于并发清理阶段用户线程仍然在运行，此时产生的垃圾在此次清理阶段无法清除，只能留待下次清理，这些垃圾就是浮动垃圾。由于清理时用户线程仍在运行，所以不能等到老年代完全没有空间时才进行清理，必须为当前运行的程序保留充足的运行空间。在JDK1.5的默认设置下，CMS收集器在老年代内存占用超过68%之后就会工作，在JDK1.6中，这个阈值已经提高到了92%。如果CMS运行过程中预留的空间不能满足当前运行程序额需要，就会产生“Concurrent Mode Failure”失败，这时虚拟机就会使用Serial Old进行清理。</li>
+<li>CMS收集器无法处理浮动垃圾，可能出现“Concurrent Mode Failure”失败而导致一次Full GC(使用Serial Old)。由于并发清理阶段用户线程仍然在运行，此时产生的垃圾在此次清理阶段无法清除，只能留待下次清理，这些垃圾就是浮动垃圾。由于清理时用户线程仍在运行，所以不能等到老年代完全没有空间时才进行清理，必须为当前运行的程序保留充足的运行空间。在JDK1.5的默认设置下，CMS收集器在老年代内存占用超过68%之后就会工作，在JDK1.6中，这个阈值已经提高到了92%。如果CMS运行过程中预留的空间不能满足当前运行程序的需要，就会产生“Concurrent Mode Failure”失败，这时虚拟机就会使用Serial Old进行清理。</li>
 <li>CMS是基于“标记-清除”算法的收集器，所以会产生内存碎片。</li>
 </ul>
 <p><img src="/2018/12/05/java-garbage-collection/cms.png" alt="" title="CMS收集器运行示意图"></p>
