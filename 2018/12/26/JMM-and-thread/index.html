@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="leetcode,动态规划,">
+  <meta name="keywords" content="Java内存模型,线程,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。 示例 1：  输入: “babad” 输出: “bab” 注意: “aba”也是一个有效答案。 示例 2： 输入: “cbbd” 输出: “bb” 解法一：暴力法假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。 如果一个字符串s含有回">
-<meta name="keywords" content="leetcode,动态规划">
+<meta name="description" content="Java内存模型主内存与工作内存Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。 Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存">
+<meta name="keywords" content="Java内存模型,线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode 5、最长回文子串">
-<meta property="og:url" content="http://yoursite.com/2018/11/15/leetcode-No-5/index.html">
+<meta property="og:title" content="Java内存模型与线程">
+<meta property="og:url" content="http://yoursite.com/2018/12/26/JMM-and-thread/index.html">
 <meta property="og:site_name" content="fiole&#39;s blog">
-<meta property="og:description" content="给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。 示例 1：  输入: “babad” 输出: “bab” 注意: “aba”也是一个有效答案。 示例 2： 输入: “cbbd” 输出: “bb” 解法一：暴力法假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。 如果一个字符串s含有回">
+<meta property="og:description" content="Java内存模型主内存与工作内存Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。 Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-27T07:01:05.155Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/26/JMM-and-thread/1.png">
+<meta property="og:updated_time" content="2018-12-26T13:56:57.300Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode 5、最长回文子串">
-<meta name="twitter:description" content="给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。 示例 1：  输入: “babad” 输出: “bab” 注意: “aba”也是一个有效答案。 示例 2： 输入: “cbbd” 输出: “bb” 解法一：暴力法假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。 如果一个字符串s含有回">
+<meta name="twitter:title" content="Java内存模型与线程">
+<meta name="twitter:description" content="Java内存模型主内存与工作内存Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。 Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/26/JMM-and-thread/1.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/15/leetcode-No-5/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/26/JMM-and-thread/">
 
 
 
 
 
-  <title>leetcode 5、最长回文子串 | fiole's blog</title>
+  <title>Java内存模型与线程 | fiole's blog</title>
   
 
 
@@ -253,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/15/leetcode-No-5/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/JMM-and-thread/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="fiole">
@@ -270,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">leetcode 5、最长回文子串</h1>
+          <h1 class="post-title" itemprop="name headline">Java内存模型与线程</h1>
         
 
         <div class="post-meta">
@@ -282,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-15T20:44:12+08:00">
-                2018-11-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-26T19:56:59+08:00">
+                2018-12-26
               </time>
             
 
@@ -305,8 +307,19 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/刷题/" itemprop="url" rel="index">
-                    <span itemprop="name">刷题</span>
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/Java虚拟机/" itemprop="url" rel="index">
+                    <span itemprop="name">Java虚拟机</span>
                   </a>
                 </span>
 
@@ -323,8 +336,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/11/15/leetcode-No-5/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/11/15/leetcode-No-5/" itemprop="commentCount"></span>
+                <a href="/2018/12/26/JMM-and-thread/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/26/JMM-and-thread/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -332,7 +345,7 @@
 
           
           
-             <span id="/2018/11/15/leetcode-No-5/" class="leancloud_visitors" data-flag-title="leetcode 5、最长回文子串">
+             <span id="/2018/12/26/JMM-and-thread/" class="leancloud_visitors" data-flag-title="Java内存模型与线程">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -363,29 +376,46 @@
       
 
       
-        <p>给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。</p>
-<p>示例 1： </p>
-<p>输入: “babad”</p>
-<p>输出: “bab”</p>
-<p>注意: “aba”也是一个有效答案。</p>
-<p>示例 2：</p>
-<p>输入: “cbbd”</p>
-<p>输出: “bb”</p>
-<h2 id="解法一：暴力法"><a href="#解法一：暴力法" class="headerlink" title="解法一：暴力法"></a>解法一：暴力法</h2><p>假设原字符串为s，反转字符串为s’。回文串为字符串的正向和反向是相同的，所以是一个回文串m来说，其反转字符串m’与m本身相同。</p>
-<p>如果一个字符串s含有回文子串，那该字符串既是s的子串也是s’的子串。所以该问题转变为了求一个字符串s和其反转字符串s’的最长公共子串。</p>
-<p>但是这样会存在一个问题，即原字符串s中的某一个非回文子串的逆字符串也存在，比如“abcdjkldcba”，该字符串s和s’的最长公共子串为abcd，但这并不是回文串。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">String <span class="title">longestPalindrome</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> start = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> maxLength = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">    	<span class="keyword">for</span>(<span class="keyword">int</span> j=s.length() - <span class="number">1</span>;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">        	<span class="keyword">int</span> m = i,n = j,length = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span>(m &lt; s.length() &amp;&amp; n &gt;= <span class="number">0</span> )&#123;</span><br><span class="line">	            <span class="keyword">if</span>(s.charAt(m) != s.charAt(n)&#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                    length++;</span><br><span class="line">                    m++;</span><br><span class="line">                    n--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(length &gt; maxLength)&#123;</span><br><span class="line">				<span class="comment">//验证子串的开始下标和结束下标的位置，判断是否有逆字符串出现</span></span><br><span class="line">            	    <span class="keyword">if</span>(j - i == length - <span class="number">1</span>) &#123; </span><br><span class="line">               	        maxLength = length;</span><br><span class="line">                        start = i;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s.substring(start,start + maxLength);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这种解法的时间复杂度为O(n^3)的，空间复杂度时O(1)，这种解法并不能通过所有的测试用例，测试用例太长会导致运行超时。</p>
-<h2 id="解法二：动态规划"><a href="#解法二：动态规划" class="headerlink" title="解法二：动态规划"></a>解法二：动态规划</h2><p>考虑“ababa”这个例子。如果我们已知“bab”是回文的，那么很明显，“ababa”一定是回文的，因为它的左首字母和右尾字母是相同的。</p>
-<p>定义p(i,j)：当子串si到sj为回文串时，p(i,j)为true；否则，p(i,j)为false。</p>
-<p>因此，</p>
-<p>p(i,j)=(p(i+1,j-1)) &amp; si==sj)  p(i+1,j-1)为上述例子中去掉左右的中间部分</p>
-<p>基本的实例如下：</p>
-<p>p(i,i) = true，一个字母肯定为true</p>
-<p>p(i,i+) = (si==sj)，两个字母时比较这两个字母的值</p>
-<p>由此能够得到所有解的集合，代码如下</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">String <span class="title">longestPalindrome</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">       <span class="keyword">boolean</span> p[][] = <span class="keyword">new</span> <span class="keyword">boolean</span>[s.length()][s.length()];</span><br><span class="line">       <span class="keyword">int</span> start = <span class="number">0</span>,maxLength = <span class="number">1</span>;</span><br><span class="line">       <span class="comment">//i要从最后一行开始计算，如果从第一行开始，当计算p[0][2]时需要用到</span></span><br><span class="line">       <span class="comment">//p[1][1]的值，但此时p[1][1]还尚未赋值，导致结果出错，而j只需要&gt;=i的值</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=s.length() - <span class="number">1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&lt;s.length();j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(i == j)&#123; <span class="comment">//只有一个字母的情况</span></span><br><span class="line">                   p[i][j] = <span class="keyword">true</span>;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">else</span> <span class="keyword">if</span>(i == j - <span class="number">1</span>)&#123; <span class="comment">//两个字母的情况</span></span><br><span class="line">                   p[i][j] = (s.charAt(i) == s.charAt(j));</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">else</span> &#123;</span><br><span class="line">                   p[i][j] = p[i+<span class="number">1</span>][j-<span class="number">1</span>] &amp; (s.charAt(i) == s.charAt(j));</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="comment">//计算结束后，如果当前的子串是回文的，且长度比之前的长，进行替换</span></span><br><span class="line">               <span class="keyword">if</span>(p[i][j] &amp;&amp; j-i+<span class="number">1</span> &gt; maxLength)&#123;</span><br><span class="line">                   maxLength = j-i+<span class="number">1</span>;</span><br><span class="line">                   start=i;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       String result = <span class="string">""</span>;</span><br><span class="line">       <span class="comment">// 当输入是空字符串时，maxLength默认长度是1，此时截取子串会越界，所以需判断一下</span></span><br><span class="line">       <span class="keyword">if</span>(start + maxLength &lt;= s.length())&#123;</span><br><span class="line">           result = s.substring(start,start+maxLength);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>这种方法的时间复杂度是O(n^2)，空间复杂度也是O(n^2)的。</p>
-<p>第一种方法提交，一共103个测试用例，只通过了93个；第二种方法全部通过。</p>
+        <h1 id="Java内存模型"><a href="#Java内存模型" class="headerlink" title="Java内存模型"></a>Java内存模型</h1><h2 id="主内存与工作内存"><a href="#主内存与工作内存" class="headerlink" title="主内存与工作内存"></a>主内存与工作内存</h2><p>Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。</p>
+<p>Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作都必须在工作内存中进行，线程间变量的传递均需要通过主内存完成。</p>
+<p><img src="/2018/12/26/JMM-and-thread/1.png" alt="" title="线程、工作内存、主内存关系"></p>
+<h2 id="内存间交互操作"><a href="#内存间交互操作" class="headerlink" title="内存间交互操作"></a>内存间交互操作</h2><p>Java内存模型中定义了以下8种操作，虚拟机实现时必须保证每种操作都是原子的不可再分的。</p>
+<ol>
+<li>lock（锁定）：作用于主内存的变量，它把一个变量标识为一条线程独占的状态。</li>
+<li>unlock（解锁）：作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。</li>
+<li>read（读取）：作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便后面的load动作使用。</li>
+<li>load（载入）：作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。</li>
+<li>use（使用）：作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用到变量的值的字节码指令时将会执行这个操作。</li>
+<li>assign（赋值）：作用于工作内存的变量，它把一个从执行引擎接收到的值赋给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。</li>
+<li>store（存储）：作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的write操作使用。</li>
+<li>write（写入）：作用于主内存的变量，它把store操作从工作内存中得到的变量的值放入主内存的变量中。</li>
+</ol>
+<p>read和load操作，store和write操作必须按顺序执行，但不需要连续执行，即read和load、store和write之间可以插入其他的操作。Java内存模型还规定在执行上面八种操作时必须满足以下规则：</p>
+<ul>
+<li>不允许read和load、store和write操作之一单独出现，即不允许一个变量从主内存读取了但工作内存不接受，或者从工作内存发起回写了但主内存不接受的情况出现。</li>
+<li>不允许一个线程丢弃它的最近的assign操作，即变量在工作内存中改变了之后必须把该变化同步到主内存。</li>
+<li>不允许一个线程无原因地（没有发生过assign操作）把数据从线程的工作内存同步回主内存中。</li>
+<li>一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化（load或assign）的变量，换句话说，对一个变量实施use、store之前，必须先执行过了assign和load操作。</li>
+<li>一个变量在同一个时刻只允许一条线程对其进行lock操作，但lock操作可以被同一条线程重复执行多次，多次执行lock后，只有执行相同次数的unlock操作，变量才会被解锁。</li>
+<li>如果对一个变量执行lock操作，那将会清空工作内存中此变量的值，在执行引擎使用这个变量前，需要重新执行load或assign操作初始化变量的值。</li>
+<li>如果一个变量事先没有被lock操作锁定，那就不允许对它执行unlock操作，也不允许去unlock一个被其他线程锁定住的变量。</li>
+<li>对一个变量执行unlock操作之前，必须先把此变量同步回主内存中。</li>
+</ul>
+<h2 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h2><p>当一个变量定义为volatile变量后，它具备两种特性，第一是保证此变量对所有线程的可见性，这里的“可见性”是指当一条线程修改了这个变量的值，新值对于其他线程来世是立即得知的。但这并不能保证使用了volatile变量一定是线程安全的，volatile只能保证取值的时候是正确的，再进行其他操作，在字节码上并不是原子的，所以有可能此时其他线程会修改该变量的值，导致数据出错。</p>
+<p>由于volatile变量只能保证可见性，只有满足下列两条规则才能保证线程安全。</p>
+<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。</li>
+<li>变量不需要于其他的状态变量共同参与不变约束。</li>
+</ul>
+<p>volatile变量的第二个语义是禁止指令重排序优化，普通的变量仅仅会保证在该方法的执行过程中所有依赖赋值结果的地方都能获取到正确的结果，而不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> initialized = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//假设以下代码在线程A中运行</span></span><br><span class="line">someInitMethod();</span><br><span class="line">initialized = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//假设以下代码在线程B中执行</span></span><br><span class="line"><span class="keyword">while</span>(!initialized)&#123;</span><br><span class="line">	sleep();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//使用A中初始化信息</span></span><br><span class="line">doSomething();</span><br></pre></td></tr></table></figure>
+<p>上面的伪代码很常见，如果不使用volatile关键字，initialized = true可能会在执行时进行重排序，在someInitMethod()执行前执行，这就会导致线程B运行时出错，使用了volatile关键字则可以避免这种情况。</p>
+<p>总结一下Java内存模型对volatile变量定义的特殊规则。假设T表示一个线程，V和W分别表示两个volatile变量，那么在进行read、load、use、assign、store和write操作时需满足以下规则：</p>
+<ul>
+<li>只有当线程T对变量V执行的前一个动作是load的时候，线程T才能对变量V执行use动作；并且，只有当线程T对变量V执行的后一个动作是use的时候，线程T才能对变量V执行load动作。线程T对变量V的use动作可以认为是和线程T对变量V的load、read动作相关联，必须连续一起出现（这条规则要求在工作内存中，每次使用V前都必须先从主内存刷新最新的值，用于保证能看见其他线程对变量V所做的修改后的值）。</li>
+<li>只有当线程T对变量V执行的前一个动作是assign的时候，线程T才能对变量V执行store动作；并且，只有当线程T对变量V执行的后一个动作是store的时候，线程T才能对变量V执行assign动作。线程T对变量V的assign动作可以认为是和线程T对变量V的store、write动作相关联，必须连续一起出现（这条规则要求在工作内存中，每次修改V后都必须立刻同步回主内存中，用于保证其他线程可以看到自己对变量V的修改）。</li>
+<li>假定动作A是线程T对变量V实施的use或assign动作，假定动作F是和动作A相关联的load或store动作，假定动作P是和动作F相应的对变量V的read或write动作；类似的，假定动作B是线程T对变量W实施的use或assign动作，假定动作G是和动作B相关联的load或store动作，假定动作Q是和动作G相应的对变量W的read或write动作。如果A先于B，那么P先于Q（这条规则要求volatile修饰的变量不会被指令重排序优化，保证代码的执行顺序与程序的顺序相同）。</li>
+</ul>
 
       
     </div>
@@ -403,9 +433,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+            <a href="/tags/Java内存模型/" rel="tag"># Java内存模型</a>
           
-            <a href="/tags/动态规划/" rel="tag"># 动态规划</a>
+            <a href="/tags/线程/" rel="tag"># 线程</a>
           
         </div>
       
@@ -418,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/14/HashMap/" rel="next" title="HashMap put()、get()方法源码">
-                <i class="fa fa-chevron-left"></i> HashMap put()、get()方法源码
+              <a href="/2018/12/05/java-garbage-collection/" rel="next" title="Java垃圾回收">
+                <i class="fa fa-chevron-left"></i> Java垃圾回收
               </a>
             
           </div>
@@ -427,10 +457,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/26/leetcode-No-6/" rel="prev" title="leetcode 6、Z字形变换">
-                leetcode 6、Z字形变换 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -577,7 +603,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#解法一：暴力法"><span class="nav-number">1.</span> <span class="nav-text">解法一：暴力法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解法二：动态规划"><span class="nav-number">2.</span> <span class="nav-text">解法二：动态规划</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型"><span class="nav-number">1.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主内存与工作内存"><span class="nav-number">1.1.</span> <span class="nav-text">主内存与工作内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存间交互操作"><span class="nav-number">1.2.</span> <span class="nav-text">内存间交互操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile关键字"><span class="nav-number">1.3.</span> <span class="nav-text">volatile关键字</span></a></li></ol></li></ol></div>
             
 
           </div>
