@@ -88,7 +88,8 @@
 <meta property="og:description" content="Java内存模型主内存与工作内存Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。 Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/12/26/JMM-and-thread/1.png">
-<meta property="og:updated_time" content="2018-12-26T13:56:57.300Z">
+<meta property="og:image" content="http://yoursite.com/2018/12/26/JMM-and-thread/2.png">
+<meta property="og:updated_time" content="2018-12-27T08:25:33.220Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存模型与线程">
 <meta name="twitter:description" content="Java内存模型主内存与工作内存Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有所区别，它包括了实例字段、静态字段和构成数组对象的元素，但不包括局部变量和方法参数，这是线程私有的，不存在竞争问题。 Java内存模型规定了所有的变量都存储在主内存中，每条线程还有自己的工作内存，线程的工作内存">
@@ -416,6 +417,64 @@
 <li>只有当线程T对变量V执行的前一个动作是assign的时候，线程T才能对变量V执行store动作；并且，只有当线程T对变量V执行的后一个动作是store的时候，线程T才能对变量V执行assign动作。线程T对变量V的assign动作可以认为是和线程T对变量V的store、write动作相关联，必须连续一起出现（这条规则要求在工作内存中，每次修改V后都必须立刻同步回主内存中，用于保证其他线程可以看到自己对变量V的修改）。</li>
 <li>假定动作A是线程T对变量V实施的use或assign动作，假定动作F是和动作A相关联的load或store动作，假定动作P是和动作F相应的对变量V的read或write动作；类似的，假定动作B是线程T对变量W实施的use或assign动作，假定动作G是和动作B相关联的load或store动作，假定动作Q是和动作G相应的对变量W的read或write动作。如果A先于B，那么P先于Q（这条规则要求volatile修饰的变量不会被指令重排序优化，保证代码的执行顺序与程序的顺序相同）。</li>
 </ul>
+<h2 id="long和double型变量的特殊规则"><a href="#long和double型变量的特殊规则" class="headerlink" title="long和double型变量的特殊规则"></a>long和double型变量的特殊规则</h2><p>Java内存模型规定lock、unlock、read、load、use、assign、store、write八个操作都具有原子性，但是对于64位的数据类型（double和long），在模型中特别定义了一条相对宽松的规定：允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为两次32位的操作来进行，即允许虚拟机实现选择可以不保证64位数据类型的load、store、read和write这4个操作的原子性，这就是long和double的非原子性协定。</p>
+<p>在实际开发中，目前各种平台下的商用虚拟机几乎都选择把64位数据的读写操作作为原子操作对待，因此，代码中一般不需要将long和double声明为volatile类型。</p>
+<h2 id="原子性、可见性、有序性"><a href="#原子性、可见性、有序性" class="headerlink" title="原子性、可见性、有序性"></a>原子性、可见性、有序性</h2><p>Java内存模型是围绕在并发过程中如何处理原子性、可见性、有序性来创建的。</p>
+<p><strong>原子性：</strong>有Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store和write，我们基本可以认为基本数据类型的访问读写是具备原子性的（long和double的非原子性协定在虚拟机实现时也保证了其原子性）。</p>
+<p>如果应用场景需要更大范围的原子性保证，Java内存模型还提供了lock和unlock操作，尽管这两个操作并不能供用户直接使用，但是提供了字节码指令monitorenter和monitorexit来隐式地使用这个两个操作，这两个字节码指令反映到Java代码中就是同步块——synchronized关键字，因此synchronized块之间的操作也具备原子性。</p>
+<p><strong>可见性：</strong>可见性是指一个线程修改了共享变量的值，其他线程能够立即得到这个修改。Java内存模型通过在变量修改后将新值同步回主内存，在变量读取前从主内存刷新变量值这种依赖主内存作为媒介的方式实现可见性。volatile变量和普通变量都是如此，volatile变量保证了新值能够立即同步到主内存，以及每次使用都刷新，，而普通变量不能保证这一点。</p>
+<p>除了volatile之外，synchronized和final也能实现可见性。同步块的可见性是由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中”这条规则获得的，而final是指：被final修饰的字段在构造器中一旦初始化完成，并且构造器没有把“this”的引用传递出去，那在其他线程中就能看见final字段的值。</p>
+<p><strong>有序性：</strong>Java程序中天然的有序性可以总结为一句话：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。前半句指“线程内表现为串行的语义”，后半句是指“指令重排序”现象和“工作内存与主内存同步延迟”现象。</p>
+<p>Java语言提供了volatile和synchronized两个关键字来保证线程之间的有序性。volatile本身禁止了指令重排序，而synchronized则是由“一个变量在同一个时刻只允许一个线程对其进行lock操作”这条规则获得的。</p>
+<h2 id="先行发生原则"><a href="#先行发生原则" class="headerlink" title="先行发生原则"></a>先行发生原则</h2><p>Java语言中有一个“先行发生”（happens-before）原则，它是判断数据是否存在竞争、线程是否安全的主要依据。</p>
+<p>Java内存模型有一些“天然的”先行发生关系，这些先行发生关系无须任务同步器协助就以及存在。</p>
+<ul>
+<li><strong>程序次序规则：</strong>在一个线程内，按照程序代码顺序，书写在前面的操作先行发生于书写在后面的操作。准确地说，应该是控制流顺序而不是程序代码顺序，因为要考虑分支、循环等结构。</li>
+<li><strong>管程锁定规则：</strong>一个unlock操作先行发生于后面对同一个锁的lock操作。这里必须强调的是同一个锁，而“后面“是指时间上的先后顺序。</li>
+<li><strong>volatile变量规则：</strong>对一个volatile变量的写操作先行发生于后面对这个变量的读操作，这里的”后面“是指时间上的先后顺序。</li>
+<li><strong>线程启动规则：</strong>Thread对象的start()方法先行发生于此现场的每一个动作。</li>
+<li><strong>线程终止规则：</strong>线程中的所有操作都先行发生于对此线程的终止检测。</li>
+<li><strong>线程中断规则：</strong>对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupt()方法检测到是否有中断发生。</li>
+<li><strong>对象终结规则：</strong>一个对象的初始化完成先行发生于它的finalize()方法的开始。</li>
+<li><strong>传递性：</strong>如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出操作A先行发生于操作C。</li>
+</ul>
+<p>用下面的例子解释上述规则：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> value = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.value = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设有两个线程A、B，线程A先调用（时间先后）setValue(1)，线程B后调用同一个对象的getValue()，依次来借助该例子分析先行发生的各种规则：</p>
+<p>由于线程A、B不在同一个线程中，故程序次序规则不适用；由于没有同步块，就没有lock和unlock操作，所以管程锁定规则不适用；由于value变量并没有被volatile修饰，所以volatile变量规则不适用；线程启动、终止、中断操作也同样不适用。因为没有一个适用的先行发生规则，所以最后一条的传递性也无从谈起，因此我们可以判定线程A在时间上先于线程B，但是无法确定线程B中getValue()的返回结果，也就是说，这里的操作不是线程安全的。</p>
+<p>要修复这个”bug”，我们可以将getter/setter方法定义为synchronized方法，这样就可以使用管程锁定规则；也可以将value定义为volatile类型，由于setter方法对value的修改不依赖value的原值，满足volatile关键字使用场景，这样就可以使用volatile变量规则来实现先行发生原则。</p>
+<p>通过上面的例子，我们可以得出结论：一个操作“时间上的先发生”不代表这个操作会“先行发生”，反过来，“先行发生”的也不代表是“时间上先发生的”。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//以下操作在同一线程中执行</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> j = <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>根据程序次序规则，int i = 1的操作先行发生于int j = 2，但是int j = 2在执行时可能会被处理器先执行，这并不影响先行发生原则的正确性。</p>
+<p>上面两个例子例子证明了：时间先后顺序与先行发生原则之间基本没有太多的关系，所以我们衡量并发安全问题的时候，一切必须以先行发生原则为准。</p>
+<h1 id="Java线程"><a href="#Java线程" class="headerlink" title="Java线程"></a>Java线程</h1><h2 id="Java线程调度"><a href="#Java线程调度" class="headerlink" title="Java线程调度"></a>Java线程调度</h2><p>线程调度是指系统为线程分配处理器使用权的过程，主要调度方式有两种：协同式线程调度和抢占式线程调度。</p>
+<p>协同式线程调度，线程的执行时间由线程本身来控制，线程把自己的工作执行完之后，要主动通知系统切换到另外一个线程上。</p>
+<p>优点：实现简单，切换操作对线程自己是可知的，没有线程同步问题。</p>
+<p>缺点：线程执行时间不可控，可能会因为线程问题导致其一直占用线程导致程序阻塞。</p>
+<p>抢占式线程调度，每个线程由系统来分配执行时间，线程的切换不由线程本身来决定（在Java中，Thread.yield()可以让出执行时间，但是要获取执行时间的话，线程本身没有办法）。在这种调度方式下，线程的执行时间是可控的，也不会有一个线程导致程序阻塞的情况出现。Java使用的线程调度方式是抢占式的。</p>
+<p>Java语言一共设置了10个级别的优先级，在两个线程同时处于Ready状态时，优先级越高的线程越容易被执行。但是，优先级并不靠谱，Java的线程是通过映射到系统的原生线程上来实现的，所以线程调度最终还是取决于操作系统，虽然很多操作系统都有优先级的概念，但是操作系统的优先级并不能与Java的优先级一一对应。如Windows系统有7个优先级，这会导致Java线程出现优先级相同的情况。同时，Java的优先级还有可能被系统改变。</p>
+<h2 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h2><p>Java线程有五种状态：</p>
+<ul>
+<li>新建（New）：创建后尚未启动的线程。</li>
+<li>运行（Runnable）：Runnable包括了操作系统线程状态中的Running和Ready，也就是处于此状态的线程有可能正在执行，也有可能正在等待着CPU分配执行时间。</li>
+<li>无限期等待（Wait）：处于这种状态的线程不会被分配CPU执行时间，它们要等待被其他线程显式地唤醒。以下方法会让线程陷于无限期等待状态：<ol>
+<li>没有设置Timeout参数的Object.wait()方法</li>
+<li>没有设置Timeout参数的Thread.join()方法</li>
+<li>LockSupport.park()方法。</li>
+</ol>
+</li>
+<li>限期等待（Timed Waiting）：处于这种状态的线程也不会被CPU分配执行时间，不过无须等待其他线程显式地唤醒，在一定时间之后它们会由系统自动唤醒。以下方法会让线程进入限期等待状态：<ol>
+<li>Thread.sleep()方法</li>
+<li>设置了Timeout参数的Object.wait()方法</li>
+<li>设置了Timeout参数的Thread.join()方法</li>
+<li>LockSupport.parkNanos()方法</li>
+<li>LockSupport.parkUntil()方法</li>
+</ol>
+</li>
+<li>阻塞（Blocked）：线程被阻塞了，“阻塞状态”与“等待状态”的区别是：“阻塞状态”在等待着获取到一个排他锁，这个事件将在另外一个线程放弃这个锁的时候发生；而“等待状态”则是在等待一段时间，或者唤醒动作的发生。在程序等待进入同步区域的时候，线程将进入这种状态。</li>
+<li>结束（Terminated）：已终止线程的线程状态，线程已经结束执行。 </li>
+</ul>
+<p><img src="/2018/12/26/JMM-and-thread/2.png" alt="" title="线程状态转换图"></p>
 
       
     </div>
@@ -603,7 +662,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型"><span class="nav-number">1.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主内存与工作内存"><span class="nav-number">1.1.</span> <span class="nav-text">主内存与工作内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存间交互操作"><span class="nav-number">1.2.</span> <span class="nav-text">内存间交互操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile关键字"><span class="nav-number">1.3.</span> <span class="nav-text">volatile关键字</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java内存模型"><span class="nav-number">1.</span> <span class="nav-text">Java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主内存与工作内存"><span class="nav-number">1.1.</span> <span class="nav-text">主内存与工作内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存间交互操作"><span class="nav-number">1.2.</span> <span class="nav-text">内存间交互操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile关键字"><span class="nav-number">1.3.</span> <span class="nav-text">volatile关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#long和double型变量的特殊规则"><span class="nav-number">1.4.</span> <span class="nav-text">long和double型变量的特殊规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原子性、可见性、有序性"><span class="nav-number">1.5.</span> <span class="nav-text">原子性、可见性、有序性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#先行发生原则"><span class="nav-number">1.6.</span> <span class="nav-text">先行发生原则</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java线程"><span class="nav-number">2.</span> <span class="nav-text">Java线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java线程调度"><span class="nav-number">2.1.</span> <span class="nav-text">Java线程调度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程状态转换"><span class="nav-number">2.2.</span> <span class="nav-text">线程状态转换</span></a></li></ol></li></ol></div>
             
 
           </div>
