@@ -98,7 +98,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/parallel.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/cms.png">
 <meta property="og:image" content="http://yoursite.com/2018/12/05/java-garbage-collection/g1.png">
-<meta property="og:updated_time" content="2018-12-25T06:39:12.729Z">
+<meta property="og:updated_time" content="2019-01-15T06:07:38.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java垃圾回收">
 <meta name="twitter:description" content="Java堆的内存有限的，容纳的对象也是有限的，当Java堆的内存容量不足以容纳准备加入的对象时，就需要虚拟机对内存进行清理，同时虚拟机也需要对对象进行精准识别，找出需要清理的对象，保留仍在使用的对象。  回收算法对象生存状态判断对象回收的前提是虚拟机能够正确识别对象当前的生存状态，即虚拟机要确定哪些对象是不再被使用的，哪些是需要使用的。  引用计数算法  引用技术算法时为每个对象添加一个引用计数器">
@@ -469,6 +469,9 @@
 </ul>
 <p>这四个步骤与CMS的收集过程大概相同，前两个步骤基本相同，最终标记的功能也是为了修正用户线程在运行时对原来的标记产生的改变，虚拟机会把这段时间对象变化记录在线程Remembered Set Logs里面，最终标记阶段会把Remembered Set Logs的数据合并到Remembered Set中。筛选回收阶段首先对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划，这个阶段垃圾收集线程可与用户线程并发执行。</p>
 <p><img src="/2018/12/05/java-garbage-collection/g1.png" alt="" title="G1收集器运行示意图"></p>
+<blockquote>
+<p>参考资料：<br>《深入理解JVM虚拟机》</p>
+</blockquote>
 
       
     </div>
@@ -595,7 +598,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -617,7 +620,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -680,7 +683,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
