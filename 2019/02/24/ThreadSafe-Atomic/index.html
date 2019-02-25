@@ -87,7 +87,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/2.png">
-<meta property="og:updated_time" content="2019-02-25T08:40:49.923Z">
+<meta property="og:updated_time" content="2019-02-25T12:26:12.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全性">
 <meta name="twitter:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作。 本文主要介绍与原子性相关的内容，可见性与有序性的相关内">
@@ -409,7 +409,7 @@
 <li>修饰类：括号括起来的部分，作用于<font color="red">所有对象</font></li>
 </ul>
 <p>修饰代码块：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedExample1</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span> ; i++)&#123;</span><br><span class="line">				log.info(<span class="string">"test &#123;&#125; - &#123;&#125;"</span>,j,i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		SynchronizedExample1 example1 = <span class="keyword">new</span> SynchronizedExample1();</span><br><span class="line">		SynchronizedExample1 example2 = <span class="keyword">new</span> SynchronizedExample1();</span><br><span class="line">		ExecutorService executorService = </span><br><span class="line">			Executors.newCachedThreadPool();</span><br><span class="line">		executorService.execute(() -&gt; &#123;</span><br><span class="line">			example1.test(<span class="number">1</span>);</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		executorService.execute(() -&gt; &#123;</span><br><span class="line">			example2.test(<span class="number">2</span>);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedExample1</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (<span class="keyword">this</span>)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span> ; i++)&#123;</span><br><span class="line">				log.info(<span class="string">"test &#123;&#125; - &#123;&#125;"</span>,j,i);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		SynchronizedExample1 example1 = <span class="keyword">new</span> SynchronizedExample1();</span><br><span class="line">		SynchronizedExample1 example2 = <span class="keyword">new</span> SynchronizedExample1();</span><br><span class="line">		ExecutorService executorService = </span><br><span class="line">			Executors.newCachedThreadPool();</span><br><span class="line">		executorService.execute(() -&gt; &#123;</span><br><span class="line">			example1.test(<span class="number">1</span>);</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		executorService.execute(() -&gt; &#123;</span><br><span class="line">			example2.test(<span class="number">2</span>);</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/02/24/ThreadSafe-Atomic/1.png" alt="" title="运行结果"></p>
 <p>运行结果是交替执行的，因为修饰代码块作用于调用的对象，所以两个对象的调用并不会被阻塞。</p>
 <p>修饰方法：</p>
@@ -472,6 +472,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/25/singleton/" rel="prev" title="线程安全的单例创建">
+                线程安全的单例创建 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -553,7 +557,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -575,7 +579,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
