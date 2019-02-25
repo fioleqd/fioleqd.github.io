@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="缓存一致性,MESI,">
+  <meta name="keywords" content="线程安全性,原子性,">
 
 
 
@@ -77,20 +77,18 @@
 
 
 
-<meta name="description" content="CPU与内存之间进行数据交互时，由于内存的存取速度限制导致了CPU效率低下，所以CPU发展出了高速缓存，将接下来需要的数据先放在缓存中，如何能保证缓存种的数据是CPU所需要的，局部性原理解释了这个问题。 时间局部性：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。 比如循环、递归、方法的反复调用等。 空间局部性：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。 比如顺序执行">
-<meta name="keywords" content="缓存一致性,MESI">
+<meta name="description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作 乐观锁与悲观所在多线程环境下，对共享资源的操作会采用一些">
+<meta name="keywords" content="线程安全性,原子性">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CPU缓存一致性——MESI协议">
-<meta property="og:url" content="http://yoursite.com/2019/02/20/MESI/index.html">
+<meta property="og:title" content="线程安全性（1）-原子性">
+<meta property="og:url" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/index.html">
 <meta property="og:site_name" content="fiole&#39;s blog">
-<meta property="og:description" content="CPU与内存之间进行数据交互时，由于内存的存取速度限制导致了CPU效率低下，所以CPU发展出了高速缓存，将接下来需要的数据先放在缓存中，如何能保证缓存种的数据是CPU所需要的，局部性原理解释了这个问题。 时间局部性：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。 比如循环、递归、方法的反复调用等。 空间局部性：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。 比如顺序执行">
+<meta property="og:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作 乐观锁与悲观所在多线程环境下，对共享资源的操作会采用一些">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/02/20/MESI/1.png">
-<meta property="og:updated_time" content="2019-02-24T12:28:58.391Z">
+<meta property="og:updated_time" content="2019-02-25T03:02:20.741Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CPU缓存一致性——MESI协议">
-<meta name="twitter:description" content="CPU与内存之间进行数据交互时，由于内存的存取速度限制导致了CPU效率低下，所以CPU发展出了高速缓存，将接下来需要的数据先放在缓存中，如何能保证缓存种的数据是CPU所需要的，局部性原理解释了这个问题。 时间局部性：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。 比如循环、递归、方法的反复调用等。 空间局部性：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。 比如顺序执行">
-<meta name="twitter:image" content="http://yoursite.com/2019/02/20/MESI/1.png">
+<meta name="twitter:title" content="线程安全性（1）-原子性">
+<meta name="twitter:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作 乐观锁与悲观所在多线程环境下，对共享资源的操作会采用一些">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/20/MESI/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/">
 
 
 
 
 
-  <title>CPU缓存一致性——MESI协议 | fiole's blog</title>
+  <title>线程安全性（1）-原子性 | fiole's blog</title>
   
 
 
@@ -253,7 +251,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/20/MESI/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="fiole">
@@ -270,7 +268,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">CPU缓存一致性——MESI协议</h1>
+          <h1 class="post-title" itemprop="name headline">线程安全性（1）-原子性</h1>
         
 
         <div class="post-meta">
@@ -282,8 +280,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T10:17:34+08:00">
-                2019-02-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-24T20:30:00+08:00">
+                2019-02-24
               </time>
             
 
@@ -334,8 +332,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/02/20/MESI/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/20/MESI/" itemprop="commentCount"></span>
+                <a href="/2019/02/24/ThreadSafe-Atomic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/24/ThreadSafe-Atomic/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,7 +341,7 @@
 
           
           
-             <span id="/2019/02/20/MESI/" class="leancloud_visitors" data-flag-title="CPU缓存一致性——MESI协议">
+             <span id="/2019/02/24/ThreadSafe-Atomic/" class="leancloud_visitors" data-flag-title="线程安全性（1）-原子性">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -374,143 +372,36 @@
       
 
       
-        <p>CPU与内存之间进行数据交互时，由于内存的存取速度限制导致了CPU效率低下，所以CPU发展出了高速缓存，将接下来需要的数据先放在缓存中，如何能保证缓存种的数据是CPU所需要的，局部性原理解释了这个问题。</p>
-<pre><code>时间局部性：如果一个信息项正在被访问，那么在近期它很可能还会被再次访问。
-</code></pre><p>比如循环、递归、方法的反复调用等。</p>
-<pre><code>空间局部性：如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。
-</code></pre><p>比如顺序执行的代码、连续创建的两个对象、数组等。</p>
-<p>MESI(Modified Exclusive Shared Or Invalid)是四种状态首字母的缩写。</p>
-<p><em>注：缓存行(Cache line):缓存存储数据的单元</em></p>
-<p>M：被修改(Modified)</p>
-<p>该缓存行只被缓存在该CPU的缓存中，并且是被修改过的（dirty),即与主存中的数据不一致，该缓存行中的内存需要在未来的某个时间点（允许其它CPU读取主存中相应内存之前）写回（write back）主存。当被写回主存之后，该缓存行的状态会变成独享（exclusive)状态。</p>
-<p>E:独享的(Exclusive)</p>
-<p>该缓存行只被缓存在该CPU的缓存中，它是未被修改过的（clean)，与主存中数据一致。该状态可以在任何时刻当有其它CPU读取该内存时变成共享状态（shared)。同样地，当CPU修改该缓存行中内容时，该状态可以变成Modified状态。</p>
-<p>S:共享的(Shared)</p>
-<p>该状态意味着该缓存行可能被多个CPU缓存，并且各个缓存中的数据与主存数据一致（clean)，当有一个CPU修改该缓存行中，其它CPU中该缓存行可以被作废（变成Invalid）。</p>
-<p>I:无效的(Invalid)</p>
-<p>该缓存是无效的（可能有其它CPU修改了该缓存行）。</p>
-<p><img src="/2019/02/20/MESI/1.png" alt=""></p>
-<p>Local Read表示本内核读本Cache的值，Local Write表示本内核写Cache中的值，Remote Read表示其他内核读其他Cache中的值，Remote write 表示其他内核写其他Cache的值。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">当前状态</th>
-<th style="text-align:center">事件</th>
-<th style="text-align:left">行为</th>
-<th style="text-align:center">下一个状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Invalid</td>
-<td style="text-align:center">Local Read</td>
-<td style="text-align:left">如果其他Cache没有这份数据，本Cache从该内存中取数据，Cache line状态变成E；如果其他Cache有这份数据，且状态为M，则将数据更新到内存，本Cache再从内存中取数据，两个Cache的Cache line状态都变成S；如果其他Cache有这份数据，且状态为S或者E，本Cache从内存中取数据，这些Cache的Cache line状态都变成S。</td>
-<td style="text-align:center">E/S</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Local Write</td>
-<td style="text-align:left">从内存中取数据，在Cache中修改，状态变成M；如果其他Cache有这份数据，切状态为M，则要先将数据更新到内存；如果其他Cache有这份数据，则其他Cache的Cache line状态变成1</td>
-<td style="text-align:center">M</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Read</td>
-<td style="text-align:left">既然是invalid，别的核的操作与它无关</td>
-<td style="text-align:center">I</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Write</td>
-<td style="text-align:left">既然是invalid，别的核的操作与它无关</td>
-<td style="text-align:center">I</td>
-</tr>
-<tr>
-<td style="text-align:center">Exclusive</td>
-<td style="text-align:center">Local Read</td>
-<td style="text-align:left">从Cache中取数据，状态不变</td>
-<td style="text-align:center">E</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Local Write</td>
-<td style="text-align:left">修改Cache的数据，状态为M</td>
-<td style="text-align:center">M</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Read</td>
-<td style="text-align:left">数据和其他核共用，状态变成了S</td>
-<td style="text-align:center">S</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Write</td>
-<td style="text-align:left">数据被修改，本Cache line不能再使用，状态变成I</td>
-<td style="text-align:center">I</td>
-</tr>
-<tr>
-<td style="text-align:center">Shared</td>
-<td style="text-align:center">Local Read</td>
-<td style="text-align:left">从Cache中取数据，状态不变</td>
-<td style="text-align:center">S</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Local Write</td>
-<td style="text-align:left">修改Cache中的数据，状态变成M，其他核共享的Cache line状态变成I</td>
-<td style="text-align:center">I</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Read</td>
-<td style="text-align:left">状态不变</td>
-<td style="text-align:center">S</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Write</td>
-<td style="text-align:left">数据被修改，本Cache line不能再使用，状态变成I</td>
-<td style="text-align:center">I</td>
-</tr>
-<tr>
-<td style="text-align:center">Modified</td>
-<td style="text-align:center">Local Read</td>
-<td style="text-align:left">从Cache中取数据，状态不变</td>
-<td style="text-align:center">M</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Local Write</td>
-<td style="text-align:left">修改Cache中的数据，状态不变</td>
-<td style="text-align:center">M</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Read</td>
-<td style="text-align:left">这行数据被写到内存中，使其他核能使用到最新的数据，状态变成S</td>
-<td style="text-align:center">S</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">Remote Write</td>
-<td style="text-align:left">这行数据被写到内存中，使其他核能使用到最新的数据，由于其它核会修改这行数据，状态变成I</td>
-<td style="text-align:center">I</td>
-</tr>
-</tbody>
-</table>
-<p><strong>操作：</strong></p>
-<p>在一个典型系统中，可能会有几个缓存（在多核系统中，每个核心都会有自己的缓存）共享主存总线，每个相应的CPU会发出读写请求，而缓存的目的是为了减少CPU读写共享主存的次数。</p>
-<p>一个缓存除在Invalid状态外都可以满足cpu的读请求，一个invalid的缓存行必须从主存中读取（变成S或者 E状态）来满足该CPU的读请求。</p>
-<p>一个写请求只有在该缓存行是M或者E状态时才能被执行，如果缓存行处于S状态，必须先将其它缓存中该缓存行变成Invalid状态（也既是不允许不同CPU同时修改同一缓存行，即使修改该缓存行中不同位置的数据也不允许）。该操作经常作用广播的方式来完成，例如：Request For Ownership (RFO)</p>
-<p>缓存可以随时将一个非M状态的缓存行作废，或者变成Invalid状态，而一个M状态的缓存行必须先被写回主存。</p>
-<p>一个处于M状态的缓存行必须时刻监听所有试图读该缓存行相对于主存的操作，这种操作必须在缓存将该缓存行写回主存并将状态变成S状态之前被延迟执行。</p>
-<p>一个处于S状态的缓存行也必须监听其它缓存使该缓存行无效或者独享该缓存行的请求，并将该缓存行变成无效（Invalid）。</p>
-<p>一个处于E状态的缓存行也必须监听其它缓存读主存中该缓存行的操作，一旦有这种操作，该缓存行需要变成S状态。</p>
-<p>对于M和E状态而言总是精确的，他们在和该缓存行的真正状态是一致的。而S状态可能是非一致的，如果一个缓存将处于S状态的缓存行作废了，而另一个缓存实际上可能已经独享了该缓存行，但是该缓存却不会将该缓存行升迁为E状态，这是因为其它缓存不会广播他们作废掉该缓存行的通知，同样由于缓存并没有保存该缓存行的copy的数量，因此（即使有这种通知）也没有办法确定自己是否已经独享了该缓存行。</p>
-<p>从上面的意义看来E状态是一种投机性的优化：如果一个CPU想修改一个处于S状态的缓存行，总线事务需要将所有该缓存行的copy变成invalid状态，而修改E状态的缓存不需要使用总线事务。</p>
+        <h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><p>当多个线程访问某个类时，不管运行时环境采用<font color="red">何种调度方式</font>或者这些进程将如何交替执行，并且在主调代码中<font color="red">不需要任何额外的同步或协同</font>，这个类都能表现出<font color="red">正确的行为</font>，那么就称这个类是线程安全的。</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作</p>
+<h3 id="乐观锁与悲观所"><a href="#乐观锁与悲观所" class="headerlink" title="乐观锁与悲观所"></a>乐观锁与悲观所</h3><p>在多线程环境下，对共享资源的操作会采用一些必要的手段保证数据的正确性，即采用乐观锁与悲观锁的方式。</p>
+<p><strong>乐观锁</strong></p>
+<p>对共享资源进行操作时，每次都假设其他人不会修改，所以不会上，但是在更新的时候会判断一下在此期间有没有人去更新该数据，可以使用版本号机制和CAS算法实现。<strong>乐观锁适用于多读的应用类型，这样可以提高吞吐量</strong>，像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式<strong>CAS</strong>实现的。</p>
+<p><strong>悲观锁</strong></p>
+<p>悲观锁与乐观锁相反，悲观锁总是假设最坏的情况，即总是认为其他人会修改数据，所以对数据进行操作时都会上锁，这样别人使用该数据时都会阻塞直到它拿到锁（<strong>共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程</strong>）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。Java中synchronized和ReentrantLock等独占锁就是悲观锁思想的实现。</p>
+<p>从上面对两种锁的介绍，我们知道两种锁各有优缺点，不可认为一种好于另一种，像乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。</p>
+<h3 id="CAS算法"><a href="#CAS算法" class="headerlink" title="CAS算法"></a>CAS算法</h3><p>CAS即compare and swap，是一种有名的无锁算法。无锁编程，即不使用锁的情况下实现多线程之间的变量同步，也就是在没有线程被阻塞的情况下实现变量的同步，所以也叫非阻塞同步（Non-blocking Synchronization）。</p>
+<p>CAS算法涉及三个操作数</p>
+<ul>
+<li>需要读写的内存值V</li>
+<li>进行比较的值A</li>
+<li>拟写入的新值B</li>
+</ul>
+<p>当且仅当V的值等于A时，CAS通过原子方式用新值B来更新V的值，否则不会执行任何操作。</p>
+<p>以AtomicInteger类的源码为例，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">incrementAndGet</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>,valueOffset,<span class="number">1</span>) + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> var5;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">	&#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line">	<span class="keyword">return</span> var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AtomicInteger中的incrementAndGet()方法调用了Unsafe类的getAndAddInt()方法，这个方法有三个参数，第一个参数var1是Atomic原子类对象，第二个参数var2相当于CAS算法三个操作数中的A，第三个参数var4是需要增加的值。方法体内的var5相当于CAS算法三个操作数中的V，通过native方法getIntVolatile()获取内存中的值，compareAndSwapInt()是native方法，比较var2和var5的值是否相同，即CAS算法的A和V的值，如果相同就执行var5 + var4操作，如果不同则重新取var5的值进行比较。</p>
+<h3 id="CAS算法存在的问题"><a href="#CAS算法存在的问题" class="headerlink" title="CAS算法存在的问题"></a>CAS算法存在的问题</h3><p><strong>1、循环开销大</strong></p>
+<p>自旋CAS（也就是不成功就一直循环执行直到成功）如果长时间不成功，会给CPU带来非常大的执行开销。尤其是写操作多的情况下，循环时间会更长，降低CPU效率。</p>
+<p><strong>2、ABA问题</strong></p>
+<p>当需要修改某个内存值V时，其他线程先把该值V修改为了B，此时从内存取来的值是B，比较失败之后重新取值；其他线程又将这个值修改为了A，这时重新取得的值是A，符合CAS算法的条件，所以将值修改为了B。但是这时的A并不是原来的值，这个问题被称为CAS操作的“ABA问题”。解决这个问题，则需要引入版本号，每次进行一次操作就将版本号加1，CAS算法每次比较时，既需要比较值是否相同，又需要比较版本号是否相同。JDK1.5之后的AtomicStampedReference类就提供了此种功能。</p>
+<p><strong>3、只能保证一个共享变量的原子操作</strong></p>
+<p>CAS只对单个共享变量有效，当操作设计多个共享变量时CAS无效。但从JDK1.5开始，提供了AtomicReference类，可以将多个变量放在一个对象里进行CAS操作。</p>
+<h3 id="CAS与synchronized的使用情景"><a href="#CAS与synchronized的使用情景" class="headerlink" title="CAS与synchronized的使用情景"></a>CAS与synchronized的使用情景</h3><p><strong>简单的来说CAS适用于写比较少的情况下（多读场景，冲突一般较少）</strong></p>
+<p><strong>synchronized适用于写比较多的情况下（多写场景，冲突一般较多）</strong></p>
 <blockquote>
-<p>参考资料：<br>9876-博客 <a href="https://blog.csdn.net/unei66/article/details/25738977" target="_blank" rel="noopener">https://blog.csdn.net/unei66/article/details/25738977</a><br>realxie博客 <a href="https://blog.csdn.net/realxie/article/details/7317630" target="_blank" rel="noopener">https://blog.csdn.net/realxie/article/details/7317630</a></p>
+<p>参考资料：<br><a href="https://www.jianshu.com/p/cf57726e77f2" target="_blank" rel="noopener">https://www.jianshu.com/p/cf57726e77f2</a><br><a href="https://www.imooc.com/article/details/id/44217" target="_blank" rel="noopener">https://www.imooc.com/article/details/id/44217</a></p>
 </blockquote>
 
       
@@ -529,9 +420,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/缓存一致性/" rel="tag"># 缓存一致性</a>
+            <a href="/tags/线程安全性/" rel="tag"># 线程安全性</a>
           
-            <a href="/tags/MESI/" rel="tag"># MESI</a>
+            <a href="/tags/原子性/" rel="tag"># 原子性</a>
           
         </div>
       
@@ -544,8 +435,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/14/classload/" rel="next" title="类加载机制">
-                <i class="fa fa-chevron-left"></i> 类加载机制
+              <a href="/2019/02/20/MESI/" rel="next" title="CPU缓存一致性——MESI协议">
+                <i class="fa fa-chevron-left"></i> CPU缓存一致性——MESI协议
               </a>
             
           </div>
@@ -553,10 +444,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/24/ThreadSafe-Atomic/" rel="prev" title="线程安全性（1）-原子性">
-                线程安全性（1）-原子性 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -611,8 +498,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -684,6 +580,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#线程安全性"><span class="nav-number">1.</span> <span class="nav-text">线程安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性"><span class="nav-number">2.</span> <span class="nav-text">原子性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁与悲观所"><span class="nav-number">3.</span> <span class="nav-text">乐观锁与悲观所</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS算法"><span class="nav-number">4.</span> <span class="nav-text">CAS算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS算法存在的问题"><span class="nav-number">5.</span> <span class="nav-text">CAS算法存在的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAS与synchronized的使用情景"><span class="nav-number">6.</span> <span class="nav-text">CAS与synchronized的使用情景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
