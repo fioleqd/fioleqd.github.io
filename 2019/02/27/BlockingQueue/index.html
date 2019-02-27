@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="阻塞队列,">
 
 
 
@@ -77,13 +77,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="fiole&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/categories/技术/Java源码/index.html">
+<meta name="description" content="阻塞队列常用于生产者和消费者的场景，生产者是往队列中添加元素的线程，消费者是从队列中拿元素的线程。当队列满了之后，一个线程尝试进行入队列操作时会阻塞，除非另一个线程进行了出队列操作；当队列空了之后，一个线程进行出队列操作时会阻塞，除非另一个线程进行了入队列操作。     - Throws Exception Special Value Blocks Times Out     Insert add">
+<meta name="keywords" content="阻塞队列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阻塞队列">
+<meta property="og:url" content="http://yoursite.com/2019/02/27/BlockingQueue/index.html">
 <meta property="og:site_name" content="fiole&#39;s blog">
+<meta property="og:description" content="阻塞队列常用于生产者和消费者的场景，生产者是往队列中添加元素的线程，消费者是从队列中拿元素的线程。当队列满了之后，一个线程尝试进行入队列操作时会阻塞，除非另一个线程进行了出队列操作；当队列空了之后，一个线程进行出队列操作时会阻塞，除非另一个线程进行了入队列操作。     - Throws Exception Special Value Blocks Times Out     Insert add">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/02/27/BlockingQueue/1.png">
+<meta property="og:updated_time" content="2019-02-27T12:27:56.608Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="fiole&#39;s blog">
+<meta name="twitter:title" content="阻塞队列">
+<meta name="twitter:description" content="阻塞队列常用于生产者和消费者的场景，生产者是往队列中添加元素的线程，消费者是从队列中拿元素的线程。当队列满了之后，一个线程尝试进行入队列操作时会阻塞，除非另一个线程进行了出队列操作；当队列空了之后，一个线程进行出队列操作时会阻塞，除非另一个线程进行了入队列操作。     - Throws Exception Special Value Blocks Times Out     Insert add">
+<meta name="twitter:image" content="http://yoursite.com/2019/02/27/BlockingQueue/1.png">
 
 
 
@@ -113,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/技术/Java源码/">
+  <link rel="canonical" href="http://yoursite.com/2019/02/27/BlockingQueue/">
 
 
 
 
 
-  <title>分类: Java源码 | fiole's blog</title>
+  <title>阻塞队列 | fiole's blog</title>
   
 
 
@@ -138,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -232,53 +239,243 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Java源码<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/27/BlockingQueue/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fiole">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fiole's blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/11/14/HashMap/" itemprop="url">
-              
-                <span itemprop="name">HashMap put()、get()方法源码</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">阻塞队列</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-14T18:55:36+08:00" content="2018-11-14">
-          11-14
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-27T19:56:55+08:00">
+                2019-02-27
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/27/BlockingQueue/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/27/BlockingQueue/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/02/27/BlockingQueue/" class="leancloud_visitors" data-flag-title="阻塞队列">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>阻塞队列常用于生产者和消费者的场景，生产者是往队列中添加元素的线程，消费者是从队列中拿元素的线程。当队列满了之后，一个线程尝试进行入队列操作时会阻塞，除非另一个线程进行了出队列操作；当队列空了之后，一个线程进行出队列操作时会阻塞，除非另一个线程进行了入队列操作。</p>
+<p><img src="/2019/02/27/BlockingQueue/1.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">-</th>
+<th style="text-align:left">Throws Exception</th>
+<th style="text-align:left">Special Value</th>
+<th style="text-align:left">Blocks</th>
+<th style="text-align:left">Times Out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Insert</td>
+<td style="text-align:left">add(o)</td>
+<td style="text-align:left">offer(o)</td>
+<td style="text-align:left">put(o)</td>
+<td style="text-align:left">offer(o,timeout,timeunit)</td>
+</tr>
+<tr>
+<td style="text-align:left">Remove</td>
+<td style="text-align:left">remove(o)</td>
+<td style="text-align:left">poll()</td>
+<td style="text-align:left">take()</td>
+<td style="text-align:left">poll(timeout,timeunit)</td>
+</tr>
+<tr>
+<td style="text-align:left">Examine</td>
+<td style="text-align:left">element()</td>
+<td style="text-align:left">peek()</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>阻塞队列一共提供了四套方法，用于插入、删除、检查操作。第一套方法：如果这三个操作不能马上执行就抛出异常；第二套方法：如果操作不能马上执行就返回特定值，一般是true或false；第三套方法：如果操作不能马上执行会阻塞；第四套方法：如果操作不能马上执行会阻塞一定时间，阻塞完成后还不能执行则返回特定值。</p>
+<p>BlockingQueue实现类：</p>
+<p><strong>1、 ArrayBlockingQueue</strong></p>
+<p>ArrayBlockingQueue是一个有界阻塞队列，内部实现是一个数组，有界的意思是其容量是有限的，必须在初始化时指定大小，一旦指定无法改变。以FIFO方式存数据。</p>
+<p><strong>2、 DelayQueue</strong></p>
+<p>DelayQueue是一个支持延时获取元素的无界阻塞队列。队列使用PriorityQueue来实现。队列中的元素必须实现Delayed接口，在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。我们可以将DelayQueue运用在以下应用场景：</p>
+<ul>
+<li>缓存系统的设计：可以用DelayQueue保存缓存元素的有效期，使用一个线程循环查询DelayQueue，一旦能从DelayQueue中获取元素时，表示缓存有效期到了。</li>
+<li>定时任务调度。使用DelayQueue保存当天将会执行的任务和执行时间，一旦从DelayQueue中获取到任务就开始执行，从比如TimerQueue就是使用DelayQueue实现的。</li>
+</ul>
+<p><strong>3、 LinkedBlockingQueue</strong></p>
+<p>如果初始化时给定了大小，则LinkedBlockingQueue是有界的，不指定大小即是无边界的（使用了默认整型值）。操作和ArrayBlockingQueue一致。</p>
+<p><strong>4、 PriorityBlockingQueue</strong></p>
+<p>带优先级的阻塞队列，没有边界，有排序规则，允许添加null，所有插入队列的对象都必须实现Comparator接口，队列中的优先级通过Comparator接口的实现来定义。</p>
+<p><strong>5、 SynchronousQueue</strong></p>
+<p>SynchronousQueue是一个不存储元素的阻塞队列。每一个put操作必须等待一个take操作，否则不能继续添加元素。SynchronousQueue可以看成是一个传球手，负责把生产者线程处理的数据直接传递给消费者线程。队列本身并不存储任何元素，非常适合于传递性场景,比如在一个线程中使用的数据，传递给另外一个线程使用，SynchronousQueue的吞吐量高于LinkedBlockingQueue 和 ArrayBlockingQueue。</p>
+<blockquote>
+<p>参考资料<br>《Java并发编程入门与高并发面试》<br><a href="http://ifeve.com/java-blocking-queue/" target="_blank" rel="noopener">http://ifeve.com/java-blocking-queue/</a></p>
+</blockquote>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/阻塞队列/" rel="tag"># 阻塞队列</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/27/AQS/" rel="next" title="抽象队列式同步器">
+                <i class="fa fa-chevron-left"></i> 抽象队列式同步器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -286,6 +483,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -324,7 +528,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -335,7 +539,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -346,7 +550,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -528,6 +732,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
