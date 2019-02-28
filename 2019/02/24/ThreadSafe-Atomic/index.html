@@ -87,7 +87,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/2.png">
-<meta property="og:updated_time" content="2019-02-27T07:31:23.098Z">
+<meta property="og:updated_time" content="2019-02-27T12:51:53.521Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全性">
 <meta name="twitter:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作。 本文主要介绍与原子性相关的内容，可见性与有序性的相关内">
@@ -407,7 +407,7 @@
 <p>修饰静态方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++)&#123;</span><br><span class="line">		log.info(<span class="string">"test &#123;&#125; - &#123;&#125;"</span>,j,i);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">	SynchronizedExample2 example1 = <span class="keyword">new</span> SynchronizedExample2();</span><br><span class="line">	SynchronizedExample2 example2 = <span class="keyword">new</span> SynchronizedExample2();</span><br><span class="line">	ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">	executorService.execute(() -&gt; &#123;</span><br><span class="line">		example1.test(<span class="number">1</span>);</span><br><span class="line">	&#125;);</span><br><span class="line"></span><br><span class="line">	executorService.execute(() -&gt; &#123;</span><br><span class="line">		example2.test(<span class="number">2</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/02/24/ThreadSafe-Atomic/2.png" alt="" title="运行结果"></p>
-<p>修饰静态方法，作用于所有对象，随意example1执行时，example2需要等待example1执行完毕才能执行，所以结果是顺序执行的。</p>
+<p>修饰静态方法，作用于所有对象，所以example1执行时，example2需要等待example1执行完毕才能执行，所以结果是顺序执行的。</p>
 <p>修饰类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test1</span><span class="params">(<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">	<span class="keyword">synchronized</span> (SynchronizedExample2.class)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span> ; i++)&#123;</span><br><span class="line">			log.info(<span class="string">"test &#123;&#125; - &#123;&#125;"</span>,j,i);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>修饰类作用于所有对象，其运行结果与修饰静态方法相似，example1和example2是顺序执行的。</p>
@@ -557,7 +557,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -568,7 +568,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
