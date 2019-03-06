@@ -87,7 +87,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/2.png">
-<meta property="og:updated_time" content="2019-02-27T12:51:53.521Z">
+<meta property="og:updated_time" content="2019-03-06T14:15:06.233Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全性">
 <meta name="twitter:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作。 本文主要介绍与原子性相关的内容，可见性与有序性的相关内">
@@ -369,7 +369,7 @@
 <p>本文主要介绍与原子性相关的内容，可见性与有序性的相关内容在<a href="/2018/12/26/JMM-and-thread/">Java内存模型与线程</a>中有详细介绍。</p>
 <h3 id="乐观锁与悲观锁"><a href="#乐观锁与悲观锁" class="headerlink" title="乐观锁与悲观锁"></a>乐观锁与悲观锁</h3><p>在多线程环境下，对共享资源的操作会采用一些必要的手段保证数据的正确性，即采用乐观锁与悲观锁的方式。</p>
 <p><strong>乐观锁</strong></p>
-<p>对共享资源进行操作时，每次都假设其他人不会修改，所以不会上，但是在更新的时候会判断一下在此期间有没有人去更新该数据，可以使用版本号机制和CAS算法实现。<strong>乐观锁适用于多读的应用类型，这样可以提高吞吐量</strong>，像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式<strong>CAS</strong>实现的。</p>
+<p>对共享资源进行操作时，每次都假设其他人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间有没有人去更新该数据，可以使用版本号机制和CAS算法实现。<strong>乐观锁适用于多读的应用类型，这样可以提高吞吐量</strong>，像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式<strong>CAS</strong>实现的。</p>
 <p><strong>悲观锁</strong></p>
 <p>悲观锁与乐观锁相反，悲观锁总是假设最坏的情况，即总是认为其他人会修改数据，所以对数据进行操作时都会上锁，这样别人使用该数据时都会阻塞直到它拿到锁（<strong>共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程</strong>）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。Java中synchronized和ReentrantLock等独占锁就是悲观锁思想的实现。</p>
 <p>从上面对两种锁的介绍，我们知道两种锁各有优缺点，不可认为一种好于另一种，像乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。</p>
