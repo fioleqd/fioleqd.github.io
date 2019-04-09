@@ -93,7 +93,7 @@
 <meta property="og:site_name" content="fiole&#39;s blog">
 <meta property="og:description" content="不可变对象1、被final修饰的对象 final关键字可修饰：类、方法、变量  修饰类：不能被继承 修饰方法：锁定方法不被继承类修改 修饰变量：修饰数据类型变量、引用变量  final修饰数据类型变量时该变量即为常量，只能在初始化赋值，运行时不可再更改；final修饰引用类型变量时，该变量不能再指向其他对象，但是对象的内容仍可以更改。 除了final之外，Java还有不可变容器，如Collecti">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-27T07:31:15.998Z">
+<meta property="og:updated_time" content="2019-04-09T09:11:31.469Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="安全共享对象策略">
 <meta name="twitter:description" content="不可变对象1、被final修饰的对象 final关键字可修饰：类、方法、变量  修饰类：不能被继承 修饰方法：锁定方法不被继承类修改 修饰变量：修饰数据类型变量、引用变量  final修饰数据类型变量时该变量即为常量，只能在初始化赋值，运行时不可再更改；final修饰引用类型变量时，该变量不能再指向其他对象，但是对象的内容仍可以更改。 除了final之外，Java还有不可变容器，如Collecti">
@@ -398,7 +398,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> StringBuilder <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">super</span>.append(str);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>StringBuffer源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> StringBuffer <span class="title">append</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">	toStringCache = <span class="keyword">null</span>;</span><br><span class="line">	<span class="keyword">super</span>.append(str);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>以append()方法为了，相比StringBuilder，StringBuffer的所有操作加了synchronized关键字，所以StringBuffer是线程安全的，StringBuilder是线程不安全的。</p>
+<p>以append()方法为例，相比StringBuilder，StringBuffer的所有操作加了synchronized关键字，所以StringBuffer是线程安全的，StringBuilder是线程不安全的。</p>
 <p><strong>2、常用容器类</strong></p>
 <p>常用的Collections类，如ArrayList、HashSet、HashMap都是线程不安全的，在平时作为局部变量使用时，不会出现问题，但是作为全局变量使用，会产生线程不安全的问题。</p>
 <h2 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h2><p><strong>1、Vector、Stack</strong></p>
