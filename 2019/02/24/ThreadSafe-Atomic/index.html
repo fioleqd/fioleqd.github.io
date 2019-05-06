@@ -95,7 +95,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/02/24/ThreadSafe-Atomic/2.png">
-<meta property="og:updated_time" content="2019-03-06T14:15:06.233Z">
+<meta property="og:updated_time" content="2019-05-06T08:28:47.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程安全性">
 <meta name="twitter:description" content="线程安全性当多个线程访问某个类时，不管运行时环境采用何种调度方式或者这些进程将如何交替执行，并且在主调代码中不需要任何额外的同步或协同，这个类都能表现出正确的行为，那么就称这个类是线程安全的。 原子性原子性是指一个操作是不可中断的，要么全部执行成功要么全部执行失败，有着“同生共死”的感觉。提供了互斥访问，同一时刻只能有一个线程来对它进行操作。 本文主要介绍与原子性相关的内容，可见性与有序性的相关内">
@@ -400,7 +400,7 @@
 <p><strong>2、ABA问题</strong></p>
 <p>当需要修改某个内存值V时，其他线程先把该值V修改为了B，此时从内存取来的值是B，比较失败之后重新取值；其他线程又将这个值修改为了A，这时重新取得的值是A，符合CAS算法的条件，所以将值修改为了B。但是这时的A并不是原来的值，这个问题被称为CAS操作的“ABA问题”。解决这个问题，则需要引入版本号，每次进行一次操作就将版本号加1，CAS算法每次比较时，既需要比较值是否相同，又需要比较版本号是否相同。JDK1.5之后的AtomicStampedReference类就提供了此种功能。</p>
 <p><strong>3、只能保证一个共享变量的原子操作</strong></p>
-<p>CAS只对单个共享变量有效，当操作设计多个共享变量时CAS无效。但从JDK1.5开始，提供了AtomicReference类，可以将多个变量放在一个对象里进行CAS操作。</p>
+<p>CAS只对单个共享变量有效，当操作涉及多个共享变量时CAS无效。但从JDK1.5开始，提供了AtomicReference类，可以将多个变量放在一个对象里进行CAS操作。</p>
 <h3 id="synchronized的使用"><a href="#synchronized的使用" class="headerlink" title="synchronized的使用"></a>synchronized的使用</h3><ul>
 <li>修饰代码块：大括号括起来的代码，作用于<font color="red">调用的对象</font></li>
 <li>修饰方法：整个方法，作用于<font color="red">调用的对象</font></li>
