@@ -95,7 +95,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/05/08/newObject-OOMError/1.png">
 <meta property="og:image" content="http://yoursite.com/2019/05/08/newObject-OOMError/2.png">
-<meta property="og:updated_time" content="2019-05-08T14:13:46.055Z">
+<meta property="og:updated_time" content="2019-05-10T02:06:12.844Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java对象创建与OOM异常">
 <meta name="twitter:description" content="Java对象创建对象创建过程当虚拟机遇到一条new指令时，会查询方法区中是否有对实例化类的符号引用，并检查该符号引用是否已经被加载、解析、初始化，如果没有，则先进行类加载过程。 类加载验证完成之后，需要为对象分配相应的内存空间，在类加载之后，对象所占用的内存空间就确定了。 对象在内存中的存储分为三个部分：对象头、实例数据、对齐填充。  对象头：用于存储对象自身的运行时数据，如哈希码、GC分代年龄、">
@@ -424,6 +424,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RuntimeConstantPoolOOM</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] main)</span></span>&#123;</span><br><span class="line">		String str1 = <span class="keyword">new</span> StringBuilder(<span class="string">"Hello"</span>).append(<span class="string">"world"</span>).toString();</span><br><span class="line">		System.out.println(str1.intern() == str1);</span><br><span class="line">		</span><br><span class="line">		String str2 = <span class="keyword">new</span> StringBuilder(<span class="string">"wor"</span>).append(<span class="string">"ld"</span>).toString();</span><br><span class="line">		System.out.println(str2.intern() == str2);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面的代码在jdk1.6中运行会得到两个false，而在jdk1.7之后，会得到一个true，一个false。原因是：在jdk1.6中，intern()方法会把首次遇到的字符串实例复制到永久代中，返回的也是永久代中这个字符串实例的引用，而由StringBuilder创建的字符串实例在Java堆上，所以不是同一个引用，返回false。而jdk1.7之后的intern()实现不会再复制实例，只是在常量池中记录首次出现的实例引用，因此intern()返回的引用和StringBuilder创建的字符串实例是同一个。对于str2而言，因为”world”在StringBuild.toString()之前出现过，所以不符合“首次出现”原则，而”Helloworld”是首次出现，返回true。</p>
 <p>方法区中存放类信息。测试方法区溢出，可以考虑新建大量的类。</p>
+<blockquote>
+<p>参考资料<br>《深入理解Java虚拟机》</p>
+</blockquote>
 
       
     </div>
@@ -667,7 +670,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">感谢访问fiole's blog | 博客全站共34.7k字</span>
+  <span class="post-count">感谢访问fiole's blog | 博客全站共34.8k字</span>
 </div>
         
 
